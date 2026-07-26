@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>El Reino de Dios — Atlas Teológico Interactivo</title>
+
+    <!--
+    ═══════════════════════════════════════════════════════════
+    DECISIÓN TÉCNICA — GRAFO: D3.js v7 (force-simulation + SVG)
+    ═══════════════════════════════════════════════════════════
+    1. Force simulation nativa: repulsión, resortes y centro
+       sin depender de librerías de grafos pesadas.
+    2. Render SVG: control total sobre curvas bezier,
+       filtros de tinta, texturas de papel y tipografía
+       dentro de cada nodo — imposible con Canvas puro
+       a este nivel de detalle editorial.
+    3. Peso: ~70kb gzipped, sin dependencias.
+    ═══════════════════════════════════════════════════════════
+  -->
+
+    <!-- Tipografía editorial -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- D3.js v7 — fuerza + SVG (CDN) -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ════════════ ENVOLVENTE PRINCIPAL v4.0 ════════════ -->
+    <div class="wrap app-shell">
+      <!-- ════════════ CABECERA FIJA v4.0 ════════════ -->
+      <header class="app-header">
+        <div class="app-header-inner wrap">
+          <div class="brand" id="brandHome" style="cursor:pointer">
+            <div class="brand-mark" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l4-4 4 4-4 4z"/><path d="M14 7l4-4 4 4-4 4z"/><circle cx="12" cy="14" r="6"/><path d="M12 8v12M8 12h8"/></svg>
+            </div>
+            <div>
+              <div class="brand-title">Atlas Teológico</div>
+              <div class="brand-sub">DEL REINO DE DIOS</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ════════════ INTRODUCCIÓN v4.0 — Canva Hero ════════════ -->
+      <section class="intro" aria-label="Introducción">
+        <!-- Left: main content -->
+        <div class="intro-content">
+          <span class="eyebrow">ATLAS TEOLÓGICO INTERACTIVO</span>
+          <h1>El Reino de Dios:<br><span class="hero-accent">Recorrido Visual</span></h1>
+          <p>
+            13 estaciones que trazan el arco completo del Reino — desde la identidad del Rey hasta la consumación final.
+            70 pasajes bíblicos, esquema QUAD por estación y evidencias con foco teológico.
+          </p>
+          <div class="stats-row" id="heroStats">
+            <div class="stat-pill">
+              <span class="stat-num">13</span>
+              <span class="stat-lbl">Estaciones<br>teológicas</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num">70</span>
+              <span class="stat-lbl">Pasajes<br>bíblicos</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num">4</span>
+              <span class="stat-lbl">Dimensiones<br>QUAD</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-num">3</span>
+              <span class="stat-lbl">Vistas de<br>exploración</span>
+            </div>
+          </div>
+        </div>
+        <!-- Right: decorative accent -->
+        <div class="intro-accent" aria-hidden="true">
+          <div class="intro-accent-glyph">✦</div>
+          <div class="intro-accent-label">ARQUITECTURA<br>DEL REINO</div>
+          <div class="intro-accent-glyph" style="font-size:2em;opacity:0.4;">⊕</div>
+        </div>
+      </section>
+
+      <!-- ════════════ BARRA DE HERRAMIENTAS v4.0 ════════════ -->
+      <nav class="toolbar" aria-label="Herramientas de navegación">
+        <div class="search-wrap" style="position:relative;flex:1;min-width:240px;">
+          <span class="search-icon" aria-hidden="true" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--tinta-dim);pointer-events:none;display:inline-flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span>
+          <input
+            type="search"
+            id="freeSearch"
+            placeholder="Busca: evento, referencia, concepto, foco…"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Buscar en el atlas"
+            style="padding-left:40px;"
+          />
+          <button class="clear-btn" id="clearBtn" type="button" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:var(--tinta-dim);font-weight:700;cursor:pointer;opacity:0;pointer-events:none;transition:all .2s;">✕</button>
+          <span class="count-badge" id="resultHint" style="position:absolute;right:44px;top:50%;transform:translateY(-50%);font-size:.72em;padding:2px 8px;border-radius:100px;opacity:0;pointer-events:none;"></span>
+        </div>
+
+        <!-- Toggle grafo / cuadrícula -->
+        <div
+          class="view-toggle"
+          role="tablist"
+          aria-label="Vista de navegación"
+        >
+          <button
+            class="toggle-btn active"
+            id="toggleGraph"
+            role="tab"
+            aria-selected="true"
+            aria-controls="graphView"
+            data-view="graph"
+            type="button"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+            >
+              <circle cx="4" cy="4" r="2" />
+              <circle cx="12" cy="3" r="1.8" />
+              <circle cx="8" cy="12" r="2.2" />
+              <line x1="5.5" y1="5" x2="10.5" y2="3.8" />
+              <line x1="5" y1="5.5" x2="7" y2="10.5" />
+              <line x1="10" y1="4.2" x2="9" y2="10.2" />
+            </svg>
+            Grafo
+          </button>
+          <button
+            class="toggle-btn"
+            id="toggleGrid"
+            role="tab"
+            aria-selected="false"
+            aria-controls="stationsGrid"
+            data-view="grid"
+            type="button"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+            >
+              <rect x="1" y="1" width="5.5" height="5.5" rx="1" />
+              <rect x="9.5" y="1" width="5.5" height="5.5" rx="1" />
+              <rect x="1" y="9.5" width="5.5" height="5.5" rx="1" />
+              <rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1" />
+            </svg>
+            Cuadrícula
+          </button>
+        </div>
+      </nav>
+
+      <!-- ════════════ CHIPS DE PREGUNTAS v4.0 ════════════ -->
+      <div
+        class="chip-row"
+        id="chipRow"
+        role="list"
+        aria-label="Filtros por estación"
+      ></div>
+
+      <!-- ════════════ ÁREA DE CONTENIDO PRINCIPAL ════════════ -->
+      <main class="content-area">
+        <!-- Vista de grafo -->
+        <section
+          class="graph-view active"
+          id="graphView"
+          role="tabpanel"
+          aria-label="Mapa de estaciones"
+        >
+          <div class="graph-viewport" id="graphViewport">
+            <div class="graph-surface" id="graphSurface"></div>
+          </div>
+
+          <aside
+            class="graph-legend"
+            id="graphLegend"
+            aria-label="Leyenda del grafo"
+          >
+            <div class="legend-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px;"><path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2z"/><path d="M9 3v16"/><path d="M15 5v16"/></svg>Leyenda</div>
+            <div class="legend-item">
+              <span class="legend-node legend-node--center"></span>
+              <span>Centro del Reino</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-node legend-node--station"></span>
+              <span>Estación</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-line legend-line--seq"></span>
+              <span>Flujo secuencial</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-line legend-line--cross"></span>
+              <span>Relación temática</span>
+            </div>
+            <div class="legend-hint">
+              Arrastra nodos · Scroll para zoom
+            </div>
+          </aside>
+
+          <div
+            class="graph-tooltip"
+            id="graphTooltip"
+            role="tooltip"
+            aria-hidden="true"
+          ></div>
+        </section>
+
+        <!-- Vista de cuadrícula -->
+        <section
+          class="stations-grid"
+          id="stationsGrid"
+          role="tabpanel"
+          aria-label="Cuadrícula de estaciones"
+        ></section>
+      </main>
+
+      <!-- ════════════ VISTA DE DETALLE v4.0 ════════════ -->
+      <section class="page-view" id="pageView" aria-label="Detalle de estación">
+        <!-- Barra de navegación superior -->
+        <nav
+          class="page-nav"
+          id="pageNav"
+          aria-label="Navegación entre estaciones"
+        >
+          <button class="back-btn" id="pageBackBtn" type="button">
+            ← Volver al atlas
+          </button>
+          <span class="pos" id="pagePos"></span>
+          <div class="nav-btns">
+            <button id="pagePrevBtn" type="button">← Anterior</button>
+            <button id="pageNextBtn" type="button">Siguiente →</button>
+          </div>
+        </nav>
+
+        <!-- Encabezado premium -->
+        <div class="page-header" id="pageHeader">
+          <div class="page-eyebrow">◈ ESTACIÓN TEOLÓGICA</div>
+          <h2 class="page-title" id="pageTitle"></h2>
+          <div class="page-question" id="pageQuestion"></div>
+        </div>
+
+        <!-- Solapas -->
+        <div
+          class="detail-tabs"
+          role="tablist"
+          aria-label="Secciones de la estación"
+        >
+          <button
+            class="detail-tab active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="tabSynthesis"
+            id="tabBtnSynthesis"
+            data-tab="synthesis"
+            type="button"
+          >
+            <span class="tab-marker"></span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Síntesis
+          </button>
+          <button
+            class="detail-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tabTheology"
+            id="tabBtnTheology"
+            data-tab="theology"
+            type="button"
+          >
+            <span class="tab-marker"></span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Teología QUAD
+          </button>
+          <button
+            class="detail-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tabEvidences"
+            id="tabBtnEvidences"
+            data-tab="evidences"
+            type="button"
+          >
+            <span class="tab-marker"></span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Evidencias Bíblicas
+          </button>
+        </div>
+
+        <!-- Paneles -->
+        <div class="detail-panels" id="detailPanels">
+          <article
+            class="detail-panel active"
+            id="tabSynthesis"
+            role="tabpanel"
+            aria-labelledby="tabBtnSynthesis"
+            data-tab="synthesis"
+          >
+            <div class="page-prose" id="synthesisContent"></div>
+          </article>
+
+          <article
+            class="detail-panel"
+            id="tabTheology"
+            role="tabpanel"
+            aria-labelledby="tabBtnTheology"
+            data-tab="theology"
+          >
+            <div id="theologyContent"></div>
+          </article>
+
+          <article
+            class="detail-panel"
+            id="tabEvidences"
+            role="tabpanel"
+            aria-labelledby="tabBtnEvidences"
+            data-tab="evidences"
+          >
+            <div id="evidencesContent"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ════════════ FOOTER ════════════ -->
+      <footer class="app-footer" role="contentinfo">
+        <div class="foot-glyphs" aria-hidden="true">❖ ⚑ ✝ ❖</div>
+        <p class="foot-main">Atlas Teológico Interactivo del Reino de Dios</p>
+      </footer>
+    </div>
+    <!-- /.wrap -->
+
+    <script src="app.js"></script>
+  </body>
+</html>
