@@ -1686,6 +1686,33 @@ function initApp() {
   setupRefTooltips();
   augmentRefChips(document.body);
 
+  // Font size selector for synthesis
+  const fontSizeToggle = document.getElementById("fontSizeToggle");
+  if (fontSizeToggle) {
+    fontSizeToggle.addEventListener("click", (e) => {
+      if (e.target.classList.contains("font-size-btn")) {
+        const size = e.target.dataset.size;
+        const proseEl = document.getElementById("synthesisContent");
+        
+        document.querySelectorAll(".font-size-btn").forEach(btn => {
+          btn.classList.remove("active");
+        });
+        e.target.classList.add("active");
+        
+        proseEl.classList.remove("size-small", "size-medium", "size-large");
+        proseEl.classList.add(`size-${size}`);
+        
+        localStorage.setItem("fontSizePreference", size);
+      }
+    });
+    
+    const savedSize = localStorage.getItem("fontSizePreference") || "medium";
+    const proseEl = document.getElementById("synthesisContent");
+    proseEl.classList.remove("size-small", "size-medium", "size-large");
+    proseEl.classList.add(`size-${savedSize}`);
+    document.querySelector(`[data-size="${savedSize}"]`)?.classList.add("active");
+  }
+
   initCinematicScroll();
   initRevealObserver();
   applyReveals();

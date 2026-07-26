@@ -536,13 +536,46 @@ mark { background: var(--foco-soft); color: var(--tinta); border-radius: 2px; pa
 /* ═══════════════════════════════════════════════════════════════
    PESTAÑA 1 — SÍNTESIS
    ═══════════════════════════════════════════════════════════════ */
-.page-prose { font-size: 1em; max-width: 72ch; }
+.page-prose { font-size: 1.15em; text-align: center; }
 .page-prose p { margin-bottom: 14px; }
 .page-prose h3 { font-size: 1.02em; margin: 18px 0 8px; color: var(--tinta); }
 .page-prose strong { color: var(--tinta); }
 .page-prose em { color: var(--glosa-soft); }
 .page-prose ul { margin: 0 0 14px 22px; }
 .page-prose li { margin-bottom: 6px; }
+
+/* Selector tamaño de fuente */
+.font-size-toggle {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+.font-size-btn {
+  font-family: var(--font-mono);
+  font-size: .75em;
+  padding: 6px 12px;
+  border: 1.5px solid var(--vitela-line);
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+  color: var(--tinta-dim);
+}
+.font-size-btn:hover {
+  border-color: var(--glosa);
+  color: var(--glosa);
+}
+.font-size-btn.active {
+  background: var(--tinta);
+  color: var(--papel);
+  border-color: var(--tinta);
+}
+
+/* Tamaños de síntesis */
+.page-prose.size-small { font-size: 1em; }
+.page-prose.size-medium { font-size: 1.15em; }
+.page-prose.size-large { font-size: 1.3em; }
 
 
 /* ═══════════════════════════════════════════════════════════════
