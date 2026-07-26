@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano del Reino | Atlas Exegético</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">Βασιλεία</div>
+      <div>
+        <h1>Plano del Reino</h1>
+        <p>Atlas Exegético del mensaje de Jesús</p>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <input id="searchInput" type="search" placeholder="Buscar pasaje, concepto, griego..." aria-label="Buscar">
+    </div>
+
+    <div class="view-switcher" role="tablist" aria-label="Cambiar vista principal">
+      <button class="view-btn active" onclick="changeView('matrix', event)" data-view="matrix" aria-pressed="true">Matriz</button>
+      <button class="view-btn" onclick="changeView('narrative', event)" data-view="narrative" aria-pressed="false">Lectura narrativa</button>
+      <button class="view-btn" onclick="changeView('graph', event)" data-view="graph" aria-pressed="false">Red del Reino</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="main-area">
+      <div class="filters">
+        <select id="axisFilter" aria-label="Filtrar por eje">
+          <option value="all">Todos los ejes</option>
+          <option value="P1">P1 — ¿Qué es?</option>
+          <option value="P2">P2 — ¿Cómo llega?</option>
+          <option value="P3">P3 — ¿Quién entra?</option>
+          <option value="P4">P4 — ¿Cómo se vive?</option>
+          <option value="P5">P5 — ¿Cómo crece?</option>
+          <option value="P6">P6 — ¿Qué promete?</option>
+          <option value="P7">P7 — ¿Cómo culmina?</option>
+        </select>
+
+        <select id="typeFilter" aria-label="Filtrar por tipo">
+          <option value="all">Todos</option>
+          <option value="primary">Núcleo</option>
+          <option value="secondary">Eje</option>
+        </select>
+      </div>
+
+      <div class="section-header">
+        <h2>Arquitectura concéntrica del Reino</h2>
+        <p>13 estaciones narrativas organizadas por las 7 preguntas fundamentales</p>
+      </div>
+
+      <div class="matrix-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Estación</th>
+              <th>P1<br>¿Qué es?</th>
+              <th>P2<br>¿Cómo llega?</th>
+              <th>P3<br>¿Quién entra?</th>
+              <th>P4<br>¿Cómo se vive?</th>
+              <th>P5<br>¿Cómo crece?</th>
+              <th>P6<br>¿Qué promete?</th>
+              <th>P7<br>¿Cómo culmina?</th>
+            </tr>
+          </thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+
+      <div id="narrativeView" class="hidden"></div>
+
+      <section id="networkView" class="hidden">
+        <div class="network-toolbar" aria-label="Subvistas de la red">
+          <button id="mapToggle" class="view-btn active" type="button" aria-pressed="true" onclick="toggleNetworkView('map', event)">Mapa</button>
+          <button id="graphToggle" class="view-btn" type="button" aria-pressed="false" onclick="toggleNetworkView('graph', event)">Grafo</button>
+        </div>
+
+        <div id="mapView">
+          <div class="kingdom-map">
+            <div class="ring ring-7"><span>P7<br>Consumación</span></div>
+            <div class="ring ring-6"><span>P6<br>Promesa</span></div>
+            <div class="ring ring-5"><span>P5<br>Crecimiento</span></div>
+            <div class="ring ring-4"><span>P4<br>Vida del Reino</span></div>
+            <div class="ring ring-3"><span>P3<br>Entrada</span></div>
+            <div class="ring ring-2"><span>P2<br>Llegada</span></div>
+            <div class="ring ring-1"><span>P1<br>Naturaleza</span></div>
+
+            <div class="center-core">
+              <h2>Βασιλεία</h2>
+              <p>Reino de Dios</p>
+              <small>Centro integrador</small>
+            </div>
+          </div>
+
+          <div id="mapStations"></div>
+        </div>
+
+        <div id="graphView" class="hidden">
+          <div class="graph-container">
+            <svg id="kingdomGraph" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+
+          <div class="graph-info">
+            <h2>Red conceptual del Reino</h2>
+            <p>Las estaciones están conectadas según su relación teológica y narrativa.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <aside class="detail-panel">
+      <div class="panel-header">
+        <h2>Detalle</h2>
+        <span>E01 × P1</span>
+      </div>
+
+      <div class="panel-content" id="detailContent">
+        <h3>Selecciona una estación</h3>
+        <p>Aquí aparecerá el análisis exegético.</p>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
