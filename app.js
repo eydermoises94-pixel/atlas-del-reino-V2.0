@@ -1734,16 +1734,16 @@ if (fontSizeToggle) {
   console.log(`  • ${CROSS_LINKS.length} conexiones entre estaciones`);
 
   // Fix: logo/brand lleva al inicio (listener en document, delegado al #brandHome)
-  document.addEventListener("click", (e) => {
-    if (e.target.closest("#brandHome")) {
-      if (document.getElementById("pageView").classList.contains("active")) {
-        backToAtlas();
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
+document.addEventListener("click", (e) => {
+  if (e.target.closest("#brandHome")) {
+    const pageView = document.getElementById("pageView");
+    if (pageView && pageView.classList.contains("active")) {
+      backToAtlas();
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  });
-}
+  }
+});
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initApp);
