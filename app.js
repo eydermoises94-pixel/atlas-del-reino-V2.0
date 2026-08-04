@@ -1688,23 +1688,34 @@ function initApp() {
 
   // Font size selector for synthesis
   const fontSizeToggle = document.getElementById("fontSizeToggle");
-  if (fontSizeToggle) {
-    fontSizeToggle.addEventListener("click", (e) => {
-      if (e.target.classList.contains("font-size-btn")) {
-        const size = e.target.dataset.size;
-        const proseEl = document.getElementById("synthesisContent");
-        
-        document.querySelectorAll(".font-size-btn").forEach(btn => {
-          btn.classList.remove("active");
-        });
+
+if (fontSizeToggle) {
+
+  fontSizeToggle.addEventListener("click", (e) => {
+
+    if (e.target.classList.contains("font-size-btn")) {
+
+      const size = e.target.dataset.size;
+
+      const proseEl = document.getElementById("synthesisContent");
+
+      if (proseEl) {
+
+        fontSizeToggle.querySelectorAll(".font-size-btn").forEach(btn => btn.classList.remove("active"));
+
         e.target.classList.add("active");
-        
-        proseEl.classList.remove("size-small", "size-medium", "size-large");
-        proseEl.classList.add(`size-${size}`);
-        
-        localStorage.setItem("fontSizePreference", size);
+
+        const sizes = { sm: "0.9em", md: "1.05em", lg: "1.2em" };
+
+        proseEl.style.fontSize = sizes[size] || "1.05em";
+
       }
-    });
+
+    }
+
+  });
+
+}
     
     const savedSize = localStorage.getItem("fontSizePreference") || "medium";
     const proseEl = document.getElementById("synthesisContent");
