@@ -806,189 +806,128 @@ body {
   z-index: 0;
 }
 
-/* ---------- HERO / INTRO — Canva style ---------- */
+/* ---------- HERO / INTRO — Editorial cinematográfico v5.0 ---------- */
 .intro {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a120a 0%, #2c1e0f 40%, #3d2912 100%);
-  border: none;
-  border-radius: 20px;
+  background: linear-gradient(150deg, #FBF7EF 0%, #F3ECDC 55%, #ECE1C8 100%);
+  border: 1px solid rgba(35,32,25,.07);
+  border-radius: 22px;
   padding: 0 !important;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.2);
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  min-height: 340px;
+  box-shadow: 0 40px 90px rgba(90,68,30,.14), 0 6px 18px rgba(90,68,30,.08);
+  display: block;
+  height: auto;
+  min-height: min(62vh, 520px);
 }
 
-/* Left content pane */
-.intro-content {
-  padding: 52px 52px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-}
-
-/* Right accent pane */
-.intro-accent {
-  position: relative;
-  background: linear-gradient(160deg, rgba(201,138,58,0.18) 0%, rgba(139,46,46,0.22) 100%);
-  border-left: 1px solid rgba(212,167,83,0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 40px 28px;
-  overflow: hidden;
-}
-.intro-accent::before {
+/* Fine paper-grain + subtle radial glow, echoes the app's ink-on-paper language */
+.intro::before {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(45deg, rgba(212,167,83,0.04) 0px, rgba(212,167,83,0.04) 1px, transparent 1px, transparent 18px);
+    radial-gradient(ellipse 65% 55% at 78% 18%, rgba(201,138,58,.14) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 45% at 8% 92%, rgba(59,91,82,.10) 0%, transparent 68%),
+    repeating-linear-gradient(0deg, rgba(35,32,25,.02) 0px, rgba(35,32,25,.02) 1px, transparent 1px, transparent 26px);
   pointer-events: none;
-}
-.intro-accent-glyph {
-  font-size: 3.8em;
-  line-height: 1;
-  opacity: 0.85;
-  filter: drop-shadow(0 4px 16px rgba(212,167,83,0.5));
-  animation: floatGlow 8s ease-in-out infinite;
-}
-.intro-accent-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: .65em;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(212,167,83,0.7);
-  text-align: center;
-  line-height: 1.6;
+  z-index: 0;
 }
 
-/* Decorative background texture on left */
-.intro::before {
-  content: "";
+/* Corner marks — museum wall-label register */
+.hero-frame-mark {
   position: absolute;
-  top: 0; left: 0; right: 340px; bottom: 0;
-  background:
-    radial-gradient(ellipse 60% 70% at 80% 50%, rgba(201,138,58,0.12) 0%, transparent 70%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 28px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes floatGlow {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-8px); }
-}
-
-.intro h1 {
-  font-size: clamp(2.2em, 3.8vw, 3.6em) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.03em;
-  line-height: 1.08 !important;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  background-clip: unset !important;
-  margin-bottom: 16px;
-  animation: slide-up var(--dur-med) var(--ease-out) both;
-}
-.intro h1 span.hero-accent {
-  background: linear-gradient(90deg, #D4A753 0%, #e8c47a 60%, #C75B2A 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.intro .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: "JetBrains Mono", monospace;
+  z-index: 2;
+  font-family: var(--font-mono);
   font-size: .68em;
-  letter-spacing: 0.2em;
+  letter-spacing: .22em;
   text-transform: uppercase;
-  color: rgba(212,167,83,0.9);
-  background: rgba(212,167,83,0.1);
-  border: 1px solid rgba(212,167,83,0.25);
-  padding: 5px 14px;
-  border-radius: 100px;
-  margin-bottom: 22px;
-  width: fit-content;
+  color: var(--tinta-faint);
+  opacity: .85;
 }
-.intro .eyebrow::before {
-  content: "◈";
-  font-size: 0.85em;
-  opacity: 0.7;
-}
+.hero-frame-mark--tl { top: 30px; left: 36px; }
+.hero-frame-mark--br { bottom: 30px; right: 36px; }
 
-.intro p {
-  font-size: 1.02em !important;
-  line-height: 1.65 !important;
-  color: rgba(242,238,228,0.72) !important;
-  max-width: 580px;
-  animation: slide-up var(--dur-med) var(--ease-out) 120ms both;
-}
-
-.intro .stats-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 32px;
-}
-.intro .stat-pill {
+.hero-stage {
+  position: relative;
+  z-index: 2;
+  min-height: min(62vh, 520px);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(212,167,83,0.2);
-  border-radius: 12px;
-  padding: 14px 20px;
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-  cursor: default;
-}
-.intro .stat-pill:hover {
-  background: rgba(212,167,83,0.12);
-  border-color: rgba(212,167,83,0.45);
-  transform: translateY(-3px);
-}
-.intro .stat-num {
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 800;
-  font-size: 2em;
-  line-height: 1;
-  color: #D4A753;
-  -webkit-text-fill-color: #D4A753;
-  background: none;
-  -webkit-background-clip: unset;
-  background-clip: unset;
-}
-.intro .stat-lbl {
-  font-size: .67em;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(242,238,228,0.5);
-  font-weight: 600;
-  line-height: 1.4;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 56px);
+  padding: 96px 32px;
+  text-align: center;
 }
 
-/* Responsive: collapse to single column on narrow screens */
+/* ---- Línea 1: el impacto tipográfico ---- */
+.hero-line-1 {
+  margin: 0;
+  max-width: 15ch;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.14;
+  color: var(--tinta);
+  font-size: clamp(2.1em, 6.4vw, 4.6em);
+  animation: slide-up var(--dur-slow) var(--ease-out) both;
+}
+
+.hero-word-jesus {
+  position: relative;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--sello);
+  text-shadow: 3px 3px 0 rgba(139,46,46,.10);
+}
+
+.hero-word-talked {
+  position: relative;
+  display: inline-block;
+  font-weight: 800;
+  color: var(--glosa);
+  letter-spacing: .01em;
+}
+.hero-word-talked::after {
+  content: "";
+  position: absolute;
+  left: -3%;
+  right: -3%;
+  bottom: .06em;
+  height: .16em;
+  background: var(--foco-soft);
+  opacity: .55;
+  z-index: -1;
+  transform: rotate(-0.6deg);
+  border-radius: 2px;
+}
+
+/* ---- Línea 2: la pregunta que abre la curiosidad ---- */
+.hero-line-2 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--tinta-dim);
+  letter-spacing: .01em;
+  font-size: clamp(1.02em, 2.1vw, 1.34em);
+  line-height: 1.6;
+  animation: slide-up var(--dur-slow) var(--ease-out) 160ms both;
+}
+.hero-line-2-break { display: inline-block; }
+
+/* Responsive: apilar la marca de esquina y ajustar escala en pantallas medianas/pequeñas */
 @media (max-width: 860px) {
-  .intro {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-  .intro::before { right: 0; }
-  .intro-accent { display: none; }
-  .intro-content { padding: 36px 28px 32px; }
-  .intro h1 { font-size: clamp(1.8em, 6vw, 2.6em) !important; }
+  .intro { min-height: 56vh; border-radius: 18px; }
+  .hero-stage { min-height: 56vh; padding: 88px 24px 72px; gap: 26px; }
+  .hero-frame-mark--tl { top: 20px; left: 20px; }
+  .hero-frame-mark--br { bottom: 20px; right: 20px; font-size: .6em; }
+}
+
+@media (max-width: 480px) {
+  .hero-stage { padding: 80px 18px 64px; }
+  .hero-line-1 { max-width: 13ch; }
+  .hero-line-2 br,
+  .hero-line-2-break { display: block; margin-top: 4px; }
 }
 
 /* ---------- TOOLBAR ---------- */
@@ -2040,7 +1979,6 @@ mark {
   .theo-arrow { display: none !important; }
   .six-col { grid-template-columns: repeat(2, 1fr); }
   .evidence-summary { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .intro { padding: 26px 22px !important; }
   .page-header { padding: 24px 20px 22px !important; }
   .detail-panel { padding: 22px 20px 30px !important; }
   .detail-tabs { padding-left: 20px !important; }
@@ -2048,12 +1986,6 @@ mark {
 
 @media (max-width: 720px) {
   body { font-size: 15px !important; }
-
-  .intro { padding: 22px 16px !important; border-radius: 16px; }
-  .intro h1 { font-size: 1.9em !important; line-height: 1.15 !important; }
-  .intro .stats-row { gap: 10px; margin-top: 18px; }
-  .intro .stat-pill { flex: 1 1 140px; padding: 10px 12px; }
-  .intro .stat-num { font-size: 1.5em; }
 
   .toolbar {
     flex-direction: column;
@@ -2160,9 +2092,6 @@ mark {
 
 @media (max-width: 400px) {
   body { font-size: 14.5px !important; }
-  .intro h1 { font-size: 1.7em !important; }
-  .intro .stat-pill { padding: 8px 10px; }
-  .intro .stat-num { font-size: 1.4em; }
   .brand-title { font-size: .95em; }
   .version-badge { display: none; }
   .sc-title { font-size: 1.08em !important; }
