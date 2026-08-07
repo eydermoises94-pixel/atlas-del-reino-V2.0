@@ -917,17 +917,26 @@ body {
 
 /* Responsive: apilar la marca de esquina y ajustar escala en pantallas medianas/pequeñas */
 @media (max-width: 860px) {
-  .intro { min-height: 56vh; border-radius: 18px; }
-  .hero-stage { min-height: 56vh; padding: 88px 24px 72px; gap: 26px; }
-  .hero-frame-mark--tl { top: 20px; left: 20px; }
-  .hero-frame-mark--br { bottom: 20px; right: 20px; font-size: .6em; }
+  .intro { min-height: 0; border-radius: 18px; }
+  .hero-stage { min-height: 0; padding: 76px 22px 64px; gap: 22px; }
+  .hero-frame-mark--tl { top: 18px; left: 18px; }
+  .hero-frame-mark--br { bottom: 18px; right: 18px; font-size: .6em; }
 }
 
 @media (max-width: 480px) {
-  .hero-stage { padding: 80px 18px 64px; }
-  .hero-line-1 { max-width: 13ch; }
+  .hero-stage { padding: 64px 16px 52px; gap: 18px; }
+  .hero-frame-mark { font-size: .58em; letter-spacing: .16em; }
+  .hero-frame-mark--tl { top: 14px; left: 14px; }
+  .hero-frame-mark--br { bottom: 14px; right: 14px; }
+  .hero-line-1 { max-width: 12ch; font-size: clamp(1.9em, 9vw, 2.6em); }
+  .hero-line-2 { font-size: clamp(.92em, 4vw, 1.05em); }
   .hero-line-2 br,
   .hero-line-2-break { display: block; margin-top: 4px; }
+}
+
+@media (max-width: 360px) {
+  .hero-stage { padding: 56px 14px 44px; }
+  .hero-line-1 { font-size: clamp(1.7em, 9.5vw, 2.2em); max-width: 11ch; }
 }
 
 /* ---------- TOOLBAR ---------- */
