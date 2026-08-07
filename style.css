@@ -806,7 +806,18 @@ body {
   z-index: 0;
 }
 
-/* ---------- HERO / INTRO — Editorial cinematográfico v5.0 ---------- */
+/* ---------- HERO / INTRO — Editorial cinematográfico v5.1 (interactivo) ---------- */
+@property --glow-x {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 78%;
+}
+@property --glow-y {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 18%;
+}
+
 .intro {
   position: relative;
   overflow: hidden;
@@ -818,19 +829,31 @@ body {
   display: block;
   height: auto;
   min-height: min(62vh, 520px);
+  transition: box-shadow .5s var(--ease-out);
+}
+.intro:hover {
+  box-shadow: 0 48px 110px rgba(90,68,30,.19), 0 8px 22px rgba(90,68,30,.11);
 }
 
-/* Fine paper-grain + subtle radial glow, echoes the app's ink-on-paper language */
+/* Fine paper-grain + subtle radial glow, echoes the app's ink-on-paper language.
+   The glow position drifts gently on its own, and nudges toward the cursor on hover. */
 .intro::before {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 65% 55% at 78% 18%, rgba(201,138,58,.14) 0%, transparent 65%),
+    radial-gradient(ellipse 65% 55% at var(--glow-x, 78%) var(--glow-y, 18%), rgba(201,138,58,.16) 0%, transparent 65%),
     radial-gradient(ellipse 50% 45% at 8% 92%, rgba(59,91,82,.10) 0%, transparent 68%),
     repeating-linear-gradient(0deg, rgba(35,32,25,.02) 0px, rgba(35,32,25,.02) 1px, transparent 1px, transparent 26px);
   pointer-events: none;
   z-index: 0;
+  transition: background .6s var(--ease-out);
+  animation: hero-glow-drift 14s ease-in-out infinite;
+}
+
+@keyframes hero-glow-drift {
+  0%, 100% { --glow-x: 78%; --glow-y: 18%; }
+  50%      { --glow-x: 70%; --glow-y: 26%; }
 }
 
 /* Corner marks — museum wall-label register */
@@ -842,10 +865,20 @@ body {
   letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--tinta-faint);
-  opacity: .85;
+  opacity: 0;
+  animation: hero-mark-in .6s var(--ease-out) 520ms both;
+  transition: color .3s var(--ease-out), letter-spacing .3s var(--ease-out);
 }
+.intro:hover .hero-frame-mark { color: var(--tinta-dim); }
 .hero-frame-mark--tl { top: 30px; left: 36px; }
 .hero-frame-mark--br { bottom: 30px; right: 36px; }
+.hero-frame-mark--br:hover,
+.hero-frame-mark--tl:hover { letter-spacing: .3em; }
+
+@keyframes hero-mark-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: .85; transform: translateY(0); }
+}
 
 .hero-stage {
   position: relative;
@@ -875,10 +908,18 @@ body {
 
 .hero-word-jesus {
   position: relative;
+  display: inline-block;
   font-style: italic;
   font-weight: 700;
   color: var(--sello);
   text-shadow: 3px 3px 0 rgba(139,46,46,.10);
+  transition: transform .35s var(--ease-out), text-shadow .35s var(--ease-out), color .35s var(--ease-out);
+  cursor: default;
+}
+.hero-word-jesus:hover {
+  transform: translateY(-2px) rotate(-1deg);
+  text-shadow: 5px 5px 0 rgba(139,46,46,.16);
+  color: var(--sello-soft);
 }
 
 .hero-word-talked {
@@ -887,6 +928,8 @@ body {
   font-weight: 800;
   color: var(--glosa);
   letter-spacing: .01em;
+  transition: transform .35s var(--ease-out), color .35s var(--ease-out);
+  cursor: default;
 }
 .hero-word-talked::after {
   content: "";
@@ -900,6 +943,16 @@ body {
   z-index: -1;
   transform: rotate(-0.6deg);
   border-radius: 2px;
+  transition: transform .35s var(--ease-out), opacity .35s var(--ease-out), height .35s var(--ease-out);
+}
+.hero-word-talked:hover {
+  color: var(--glosa-soft);
+  transform: translateY(-2px);
+}
+.hero-word-talked:hover::after {
+  transform: rotate(0.4deg) scaleX(1.04);
+  opacity: .75;
+  height: .22em;
 }
 
 /* ---- Línea 2: la pregunta que abre la curiosidad ---- */
@@ -912,8 +965,19 @@ body {
   font-size: clamp(1.02em, 2.1vw, 1.34em);
   line-height: 1.6;
   animation: slide-up var(--dur-slow) var(--ease-out) 160ms both;
+  transition: color .3s var(--ease-out), letter-spacing .3s var(--ease-out);
 }
+.intro:hover .hero-line-2 { color: var(--tinta); letter-spacing: .02em; }
 .hero-line-2-break { display: inline-block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro::before { animation: none; }
+  .hero-frame-mark { animation: none; opacity: .85; }
+  .hero-word-jesus, .hero-word-talked, .hero-line-2,
+  .hero-word-jesus:hover, .hero-word-talked:hover, .hero-word-talked:hover::after {
+    transition: none; transform: none;
+  }
+}
 
 /* Responsive: apilar la marca de esquina y ajustar escala en pantallas medianas/pequeñas */
 @media (max-width: 860px) {

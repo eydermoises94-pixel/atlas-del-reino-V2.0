@@ -1088,10 +1088,10 @@ function showStationDetail(stationId) {
   const scrollToDetail = () => {
     const header = document.querySelector(".app-header");
     const headerH = header ? header.offsetHeight : 0;
-    const pageNav = document.getElementById("pageNav");
-    const target = pageNav
-      ? pageNav.getBoundingClientRect().top + window.scrollY - headerH - 4
-      : 0;
+    // Measure against pageView (not sticky) — measuring the sticky pageNav
+    // itself gives an unreliable rect once it has already "stuck", which
+    // was leaving a blank gap above the detail view after navigating.
+    const target = pageView.getBoundingClientRect().top + window.scrollY - headerH - 4;
     window.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
   };
   // Let hidden elements fully collapse (CSS ~350ms), then measure and scroll
@@ -1688,40 +1688,37 @@ function initApp() {
 
   // Font size selector for synthesis
   const fontSizeToggle = document.getElementById("fontSizeToggle");
+  const proseEl = document.getElementById("synthesisContent");
 
-if (fontSizeToggle) {
+  if (fontSizeToggle && proseEl) {
+    fontSizeToggle.addEventListener("click", (e) => {
+      const btn = e.target.closest(".font-size-btn");
+      if (!btn) return;
 
-  fontSizeToggle.addEventListener("click", (e) => {
+      const size = btn.dataset.size; // "small" | "medium" | "large"
+      fontSizeToggle
+        .querySelectorAll(".font-size-btn")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
 
-    if (e.target.classList.contains("font-size-btn")) {
+      proseEl.classList.remove("size-small", "size-medium", "size-large");
+      proseEl.classList.add(`size-${size}`);
+      proseEl.style.fontSize = ""; // clear any stale inline override
 
-      const size = e.target.dataset.size;
+      try {
+        localStorage.setItem("fontSizePreference", size);
+      } catch (_) {}
+    });
 
-      const proseEl = document.getElementById("synthesisContent");
-
-      if (proseEl) {
-
-        fontSizeToggle.querySelectorAll(".font-size-btn").forEach(btn => btn.classList.remove("active"));
-
-        e.target.classList.add("active");
-
-        const sizes = { sm: "0.9em", md: "1.05em", lg: "1.2em" };
-
-        proseEl.style.fontSize = sizes[size] || "1.05em";
-
-      }
-
-    }
-
-  });
-
-}
-    
     const savedSize = localStorage.getItem("fontSizePreference") || "medium";
-    const proseEl = document.getElementById("synthesisContent");
     proseEl.classList.remove("size-small", "size-medium", "size-large");
     proseEl.classList.add(`size-${savedSize}`);
-    document.querySelector(`[data-size="${savedSize}"]`)?.classList.add("active");
+    fontSizeToggle
+      .querySelectorAll(".font-size-btn")
+      .forEach((b) => b.classList.remove("active"));
+    fontSizeToggle
+      .querySelector(`[data-size="${savedSize}"]`)
+      ?.classList.add("active");
   }
 
   initCinematicScroll();
@@ -1732,6 +1729,7 @@ if (fontSizeToggle) {
   console.log(`  • ${STATIONS.length} estaciones cargadas`);
   console.log(`  • ${EVENTS.length} enseñanzas bíblicas`);
   console.log(`  • ${CROSS_LINKS.length} conexiones entre estaciones`);
+}
 
   // Fix: logo/brand lleva al inicio (listener en document, delegado al #brandHome)
 document.addEventListener("click", (e) => {
