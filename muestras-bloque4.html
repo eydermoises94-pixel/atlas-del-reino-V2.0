@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Muestras · Atlas del Reino — 4 propuestas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --papel:#F2EEE4; --papel-lift:#FBF7EC; --vitela-line:#c9bd9f;
+  --tinta:#232019; --tinta-dim:#5b5548; --tinta-faint:#8a8278;
+  --sello:#8B2E2E; --glosa:#3B5B52; --foco:#C98A3A; --foco-text:#8A5A1E;
+  --gold:#D4A753; --gold-deep:#B8872B; --ink-hot:#1B0D03;
+  --mesa:#2E2318; --mesa-deep:#17100A; --pliego:#FBF7EC; --pliego-edge:#EDE4D1;
+  --serif:'Source Serif 4',Georgia,serif; --mono:'JetBrains Mono',Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--serif); color:var(--tinta); line-height:1.6; padding:0 0 80px;
+  background:
+    radial-gradient(125% 95% at 50% 45%, transparent 42%, rgba(0,0,0,.55) 100%),
+    radial-gradient(1400px 820px at 50% -5%, rgba(150,108,58,.26), transparent 62%),
+    linear-gradient(176deg,var(--mesa) 0%,#241A11 46%,var(--mesa-deep) 100%);
+  background-attachment:fixed;
+}
+.page{width:min(1080px,calc(100% - 32px));margin:0 auto}
+.doc-head{padding:54px 0 30px;text-align:center;color:var(--papel)}
+.doc-head h1{font-size:2.1em;font-weight:700;letter-spacing:-.01em}
+.doc-head p{color:#C9BCA6;font-size:.95em;margin-top:8px}
+.muestra{
+  background:var(--pliego); border-radius:4px; margin:0 0 46px; padding:34px clamp(18px,3vw,44px) 40px;
+  box-shadow:0 2px 4px rgba(0,0,0,.34),0 14px 30px rgba(0,0,0,.34),0 44px 96px rgba(0,0,0,.44);
+}
+.tag{font-family:var(--mono);font-size:.66em;letter-spacing:.22em;text-transform:uppercase;color:var(--sello);font-weight:700}
+.muestra > h2{font-size:1.5em;margin:8px 0 6px;color:var(--ink-hot)}
+.muestra > .nota{font-size:.9em;color:var(--tinta-dim);margin-bottom:24px;max-width:70ch}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.ab{grid-template-columns:1fr}}
+.ab > div{border:1.5px solid var(--vitela-line);border-radius:10px;padding:20px;background:#fff;min-width:0}
+.lbl{font-family:var(--mono);font-size:.6em;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-faint);font-weight:700;margin-bottom:14px;display:block}
+.lbl.now{color:var(--tinta-faint)}
+.lbl.new{color:var(--gold-deep)}
+
+/* ══ A · CAPITULAR ILUMINADA ══ */
+.demo-syn p{font-size:1.02em;line-height:1.75;text-align:left;color:var(--tinta)}
+.cap-new p:first-of-type::first-letter{
+  float:left; font-family:var(--serif); font-weight:700;
+  font-size:4.4em; line-height:.78; color:var(--sello);
+  margin:.04em .12em 0 0; padding:.1em .14em .06em;
+  background:linear-gradient(150deg,#F7E5B8 0%,var(--gold) 55%,var(--gold-deep) 100%);
+  border:2px solid var(--gold-deep);
+  border-radius:3px;
+  box-shadow:0 2px 4px rgba(27,13,3,.22),0 8px 18px rgba(27,13,3,.18),inset 0 1px 0 rgba(255,255,255,.7);
+  text-shadow:0 1px 0 rgba(255,255,255,.45);
+}
+
+/* ══ B · BORDE DECKLE ══ */
+.deckle-stage{background:linear-gradient(176deg,var(--mesa),var(--mesa-deep));border-radius:10px;padding:26px 20px;border:none}
+.sheet{position:relative;height:230px;background:var(--pliego);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.13'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg,rgba(90,68,30,.035) 0 1px,transparent 1px 4px),
+    radial-gradient(circle 30px at 78% 22%, rgba(139,90,40,.16), transparent 70%),
+    radial-gradient(circle 20px at 24% 74%, rgba(120,78,34,.14), transparent 72%),
+    linear-gradient(168deg,var(--pliego),var(--pliego-edge));
+}
+.sheet.straight{box-shadow:0 2px 4px rgba(0,0,0,.34),0 16px 34px rgba(0,0,0,.4)}
+.sheet.deck{
+  --dl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='60' viewBox='0 0 16 60' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M16 0 H6 C4 7 9 13 6 19 C3 25 8 31 5 37 C2 43 8 49 6 55 C5 58 6 59 6 60 H16 Z'/%3E%3C/svg%3E");
+  --dr:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='60' viewBox='0 0 16 60' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0 0 H10 C12 7 7 13 10 19 C13 25 8 31 11 37 C14 43 8 49 10 55 C11 58 10 59 10 60 H0 Z'/%3E%3C/svg%3E");
+  -webkit-mask-image:linear-gradient(#000,#000),var(--dl),var(--dr);
+  mask-image:linear-gradient(#000,#000),var(--dl),var(--dr);
+  -webkit-mask-size:calc(100% - 28px) 100%,16px 60px,16px 60px;
+  mask-size:calc(100% - 28px) 100%,16px 60px,16px 60px;
+  -webkit-mask-position:center top,left top,right top;
+  mask-position:center top,left top,right top;
+  -webkit-mask-repeat:no-repeat,repeat-y,repeat-y;
+  mask-repeat:no-repeat,repeat-y,repeat-y;
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.42)) drop-shadow(0 18px 30px rgba(0,0,0,.45));
+}
+.sheet-txt{padding:26px 34px;font-size:.9em;color:var(--tinta-dim);font-style:italic}
+
+/* ══ C · TIPOGRAFÍA EDITORIAL ══ */
+.typ{background:linear-gradient(168deg,#3a2a1e,var(--ink-hot));color:var(--papel);border-radius:12px;padding:26px 24px;border:none}
+.typ .eyebrow-now{font-family:var(--mono);font-size:.7em;letter-spacing:.2em;color:var(--gold);font-weight:700;display:inline-block;
+  background:rgba(255,255,255,.07);border:1px solid rgba(212,167,83,.3);padding:5px 12px;border-radius:100px;margin-bottom:14px}
+.typ .title-now{font-size:1.9em;line-height:1.15;color:#fff;margin:0 0 10px}
+.typ .q-now{color:rgba(255,255,255,.85);font-style:italic;font-size:1.05em;border-left:4px solid var(--gold);padding:10px 14px;background:rgba(255,255,255,.05);border-radius:0 10px 10px 0}
+.typ .eyebrow-new{font-family:var(--mono);font-size:.6em;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-bottom:18px}
+.typ .rule-new{width:54px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:0 0 16px}
+.typ .title-new{font-size:3.3em;line-height:.98;letter-spacing:-.025em;font-weight:700;color:#fff;margin:0 0 16px;text-wrap:balance}
+.typ .q-new{font-style:italic;font-size:1.12em;line-height:1.5;color:rgba(255,255,255,.72);max-width:34ch;border:none;background:none;padding:0}
+.typ h3.h3-now{font-size:1.2em;color:var(--gold);margin-top:20px}
+.typ h3.h3-new{font-size:1.05em;font-variant-caps:all-small-caps;letter-spacing:.16em;font-weight:700;color:var(--gold);margin-top:22px;padding-bottom:8px;border-bottom:1px solid rgba(212,167,83,.35)}
+
+/* ══ D · ESTACIÓN A PANTALLA COMPLETA ══ */
+.fs-wrap{border:none;padding:0;background:none}
+.fs{
+  --c:#C75B2A;
+  position:relative;overflow:hidden;border-radius:12px;
+  min-height:440px;display:flex;flex-direction:column;justify-content:center;
+  padding:56px clamp(22px,4vw,58px) 84px;
+  background:linear-gradient(168deg,color-mix(in srgb,var(--c) 58%,var(--ink-hot)) 0%,var(--ink-hot) 74%);
+  color:var(--papel);
+}
+.fs::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(600px 340px at 82% -8%,var(--c),transparent 58%),
+             radial-gradient(460px 280px at -8% 112%,var(--gold),transparent 58%);
+  opacity:.42;mix-blend-mode:screen}
+.fs > *{position:relative;z-index:1}
+.fs .num{font-family:var(--mono);font-size:.62em;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px}
+.fs h3{font-size:clamp(2.1em,5vw,3.4em);line-height:1;letter-spacing:-.025em;margin:0 0 18px;color:#fff;text-wrap:balance}
+.fs .q{font-style:italic;font-size:1.15em;color:rgba(255,255,255,.74);max-width:32ch;line-height:1.5}
+.fs .cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:2;text-align:center;
+  font-family:var(--mono);font-size:.58em;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.fs .cue span{display:block;font-size:1.6em;margin-top:6px;animation:bob 1.9s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.fs-after{background:var(--papel-lift);border:1.5px solid var(--vitela-line);border-top:none;border-radius:0 0 12px 12px;padding:20px 24px;font-size:.9em;color:var(--tinta-dim);font-style:italic}
+@media(prefers-reduced-motion:reduce){.fs .cue span{animation:none}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="doc-head">
+  <h1>Cuatro propuestas, implementadas</h1>
+  <p>Paleta y tipografía reales del Atlas. Esto es el código que se portaría, no un boceto.</p>
+</div>
+
+<!-- A -->
+<section class="muestra">
+  <span class="tag">Muestra A</span>
+  <h2>Capitular iluminada</h2>
+  <p class="nota">Se hace con <code>::first-letter</code> sobre el primer párrafo de la síntesis. Sin tocar <code>data.js</code> ni el marcado: es puramente CSS, y si se retira no queda rastro. Una capitular por estación.</p>
+  <div class="ab">
+    <div>
+      <span class="lbl now">Ahora</span>
+      <div class="demo-syn">
+        <p>El Reino de Dios no es primero un territorio, una institución o una doctrina abstracta. Es, ante todo, una persona. Jesús no anuncia el Reino como un sistema externo que vendrá después de Él: lo encarna.</p>
+      </div>
+    </div>
+    <div>
+      <span class="lbl new">Propuesta</span>
+      <div class="demo-syn cap-new">
+        <p>El Reino de Dios no es primero un territorio, una institución o una doctrina abstracta. Es, ante todo, una persona. Jesús no anuncia el Reino como un sistema externo que vendrá después de Él: lo encarna.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B -->
+<section class="muestra">
+  <span class="tag">Muestra B</span>
+  <h2>Borde deckle · papel hecho a mano</h2>
+  <p class="nota">El pliego deja de ser un rectángulo. Máscara SVG que se repite verticalmente en los cantos izquierdo y derecho, más manchas de foxing. La sombra se genera con <code>drop-shadow</code>, así que sigue la silueta rasgada en vez de dibujar un rectángulo delator.</p>
+  <div class="ab">
+    <div class="deckle-stage">
+      <span class="lbl now" style="color:#9d8f79">Ahora · canto recto</span>
+      <div class="sheet straight"><div class="sheet-txt">El borde es una línea perfecta. Sobre la mesa oscura se lee como una tarjeta, no como una hoja.</div></div>
+    </div>
+    <div class="deckle-stage">
+      <span class="lbl new">Propuesta · canto deckle</span>
+      <div class="sheet deck"><div class="sheet-txt">El canto es irregular, como el papel de tina. La sombra sigue el contorno rasgado.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- C -->
+<section class="muestra">
+  <span class="tag">Muestra C</span>
+  <h2>Tipografía editorial</h2>
+  <p class="nota">Hoy el título de estación vive a 1,9em y la pregunta a 1,05em: un rango demasiado estrecho para crear jerarquía. La propuesta abre la escala, quita la caja de la pregunta y convierte los encabezados de sección en versalitas espaciadas.</p>
+  <div class="ab">
+    <div class="typ">
+      <span class="lbl now" style="color:#9d8f79">Ahora</span>
+      <span class="eyebrow-now">◈ ESTACIÓN TEOLÓGICA</span>
+      <div class="title-now">El Centro Absoluto: La Identidad del Rey</div>
+      <div class="q-now">¿Quién es el Rey y qué revela sobre Dios?</div>
+      <h3 class="h3-now">La Persona, no el territorio</h3>
+    </div>
+    <div class="typ">
+      <span class="lbl new">Propuesta</span>
+      <span class="eyebrow-new">Estación 01 · Teológica</span>
+      <div class="rule-new"></div>
+      <div class="title-new">El Centro Absoluto</div>
+      <div class="q-new">¿Quién es el Rey y qué revela sobre Dios?</div>
+      <h3 class="h3-new">La Persona, no el territorio</h3>
+    </div>
+  </div>
+</section>
+
+<!-- D -->
+<section class="muestra">
+  <span class="tag">Muestra D</span>
+  <h2>Estación a pantalla completa</h2>
+  <p class="nota">La cabecera de estación pasa a ocupar ~82% del alto de la ventana, con el color propio de la estación (<code>--card-color</code>) como dominante en vez de un acento. Aquí se ve a 440px para que quepa; en la app ocuparía casi toda la pantalla. Deja asomar el contenido por abajo, que es la señal de que hay que seguir bajando.</p>
+  <div class="fs-wrap">
+    <div class="fs">
+      <div class="num">Estación 01 · Teológica</div>
+      <h3>El Centro Absoluto</h3>
+      <div class="q">¿Quién es el Rey y qué revela sobre Dios?</div>
+      <div class="cue">Sigue<span>⌄</span></div>
+    </div>
+    <div class="fs-after">↑ debajo empezaría la síntesis, con las pestañas Síntesis / Teología QUAD / Evidencias.</div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
