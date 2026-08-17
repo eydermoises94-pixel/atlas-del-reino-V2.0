@@ -251,7 +251,7 @@ const GLOSSARY = [
   },
   {
     term: "Metanoia",
-    sub: "griego, μετάνοια · heb. šûb, שׁוּב",
+    sub: 'griego, <span lang="el">μετάνοια</span> · heb. šûb, <span lang="he" dir="rtl">שׁוּב</span>',
     def: "No es un cálculo mental (nous) ni un remordimiento: en su trasfondo veterotestamentario designa un giro completo de dirección vital — dejar un rumbo y tomar otro.",
   },
   {
@@ -403,7 +403,7 @@ const STATIONS = [
 <p>La entrada al <span class="kw kw-rey">Reino</span> <strong>no</strong> es por nacimiento, raza, logros intelectuales, acumulación de bienes ni observancia religiosa perfecta. Es por una <span class="kw kw-foco">reorientación radical del ser</span> completo. ${epiTag("atlas")} El Atlas agrupa esta reorientación en cuatro condiciones recurrentes que Jesús ilustra a lo largo de todo su ministerio.</p>
 <div class="gold-divider"><span>${ICONS.target}</span></div>
 <div class="flow-row">
-<div class="flow-step"><span class="fs-num">①</span><h5>Metanoia</h5><p><em>Metanoia</em> (μετάνοια) no es un cálculo de "mente" (<em>nous</em>): en su trasfondo veterotestamentario (heb. <em>šûb</em>, שׁוּב = "volverse, girar") designa un <span class="kw kw-gracia">giro completo de dirección vital</span> — dejar un rumbo y tomar otro, no un remordimiento ni un cambio de opinión.</p></div>
+<div class="flow-step"><span class="fs-num">①</span><h5>Metanoia</h5><p><em>Metanoia</em> (<span lang="el">μετάνοια</span>) no es un cálculo de "mente" (<em>nous</em>): en su trasfondo veterotestamentario (heb. <em>šûb</em>, <span lang="he" dir="rtl">שׁוּב</span> = "volverse, girar") designa un <span class="kw kw-gracia">giro completo de dirección vital</span> — dejar un rumbo y tomar otro, no un remordimiento ni un cambio de opinión.</p></div>
 <div class="flow-arrow">→</div>
 <div class="flow-step"><span class="fs-num">②</span><h5>Pistis</h5><p>No es asentimiento intelectual. Es <span class="kw kw-sello">confianza radical</span> que abandona toda otra seguridad como la del centurión romano.</p></div>
 <div class="flow-arrow">→</div>
@@ -782,6 +782,7 @@ Lo que comenzó como <strong>semilla</strong> insignificante en un establo de Be
 <blockquote>"El séptimo ángel tocó la trompeta, y hubo grandes voces en el cielo, que decían: ¡El reino del mundo ha venido a ser de nuestro Señor y de su Cristo; y él reinará por los siglos de los siglos!" <span class="ref-chip">Ap 11:15</span></blockquote>
 <blockquote>"Muchos vendrán del oriente y del occidente, y se sentarán a la mesa con Abraham, Isaac y Jacob en el reino de los cielos." <span class="ref-chip">Mt 8:11-12</span></blockquote>
 </div>
+<div class="atlas-closing">
 <div class="gold-divider" style="margin-top:24px;"><span>${ICONS.compass}</span></div>
 <h3>${ICONS.compass} Síntesis del Atlas: una sola confesión, trece facetas</h3>
 <p>${epiTag("sintesis")} Trece estaciones se resumen en una frase: <strong>el Reino de Dios es el reinado de Jesús</strong> — ya presente en su <span class="kw kw-rey">Persona</span> y en su pueblo, todavía no consumado en gloria universal. Parábolas, milagros, cruz, resurrección, Iglesia, consumación: no son trece temas distintos. Son trece caras de la misma confesión. Todos hablan de Jesús. Este Atlas ha intentado hablar de lo que Jesús hablaba.</p>
@@ -789,6 +790,7 @@ Lo que comenzó como <strong>semilla</strong> insignificante en un establo de Be
 <p>${epiTag("iphc")} ¿Y qué pasa con Israel, la Iglesia y las naciones? Aquí el Atlas habla con la voz de la IPHC: la tradición premilenial en la que se inscribe. Israel no ha sido cancelado ni sustituido. "Ha acontecido a Israel endurecimiento en parte, hasta que haya entrado la plenitud de los gentiles; y luego todo Israel será salvo" <span class="ref-chip">Ro 11:25-27</span>. Los gentiles fueron injertados en su raíz <span class="ref-chip">Ro 11:17-24</span>, no al revés. La Iglesia no hereda la promesa quitándosela a Israel: camina hacia su cumplimiento junto a él, hasta el banquete donde ambos se sientan a la misma mesa <span class="ref-chip">Mt 8:11-12</span>.</p>
 <p>Esa misma tensión — ya, todavía no — es también una ética, no solo un dato de calendario. El Reino ya reina en Jesús. Todavía no ha sido entregado, consumado, al Padre <span class="ref-chip">1 Co 15:24-25</span>. Entre esos dos extremos acechan dos tentaciones igual de falsas. El <span class="kw kw-foco">triunfalismo</span> bautiza cualquier proyecto humano — político, nacional, eclesial — como si ya fuera el Reino consumado. El quietismo no hace nada porque total, todavía no ha llegado. La ética del Reino es la de quien ya sirve a un Rey que ya reina, sin fingir que puede terminar con sus propias manos la obra que solo Él consumará.</p>
 <p>${epiTag("pentecostal")} Vivir esa tensión sin resolverla antes de tiempo no es indecisión. Para una comunidad pentecostal es el espacio propio del ${ICONS.dove} <span class="kw kw-gracia">Espíritu</span> — las arras de lo que todavía no se ve por entero, el primer pago de una promesa que se sigue cobrando. Por eso el Atlas no cierra con una fórmula sellada. Cierra con una convocatoria. Quien ha recorrido estas trece estaciones no ha terminado un estudio. Ha sido llamado por un Rey que, ahora mismo, sigue reinando.</p>
+</div>
 </div>`,
   },
 ];

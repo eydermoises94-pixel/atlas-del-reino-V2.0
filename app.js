@@ -12,9 +12,58 @@ const state = {
   currentSearch: "",
 };
 
+/* Progreso de lectura: qué estaciones ha visitado ya el usuario,
+   persistido en localStorage (mismo mecanismo que fontSizePreference). */
+function getVisitedStations() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem("visitedStations") || "[]"));
+  } catch (_) {
+    return new Set();
+  }
+}
+function markStationVisited(stationId) {
+  const visited = getVisitedStations();
+  if (visited.has(stationId)) return;
+  visited.add(stationId);
+  try {
+    localStorage.setItem("visitedStations", JSON.stringify([...visited]));
+  } catch (_) {}
+  applyVisitedMarkers();
+}
+function applyVisitedMarkers() {
+  const visited = getVisitedStations();
+  document.querySelectorAll(".station-card").forEach((card) => {
+    card.classList.toggle("is-visited", visited.has(parseInt(card.dataset.stationId, 10)));
+  });
+  if (g) {
+    g.selectAll(".graph-node").classed("is-visited", (d) => visited.has(d.id));
+  }
+}
+
 /* ================================================
    FUNCIONES DE UTILIDAD
    ================================================ */
+
+/* C19: la búsqueda también mira dentro del contenido de la estación
+   (synthesis), no solo título/pregunta. Se cachea el texto plano por
+   estación porque extraerlo de HTML en cada pulsación de tecla sería
+   trabajo repetido innecesario sobre los mismos 13 bloques. */
+const _synthesisTextCache = new Map();
+function getSynthesisPlainText(station) {
+  if (_synthesisTextCache.has(station.id)) return _synthesisTextCache.get(station.id);
+  const div = document.createElement("div");
+  div.innerHTML = station.synthesis || "";
+  const text = (div.textContent || "").toLowerCase();
+  _synthesisTextCache.set(station.id, text);
+  return text;
+}
+function stationMatchesSearch(station, lowerTerm) {
+  return (
+    station.title.toLowerCase().includes(lowerTerm) ||
+    station.question.toLowerCase().includes(lowerTerm) ||
+    getSynthesisPlainText(station).includes(lowerTerm)
+  );
+}
 
 function getStation(id) {
   return STATIONS.find((s) => s.id === id);
@@ -191,6 +240,7 @@ function initGraph() {
   );
 
   setTimeout(() => simulation.alpha(0.3).restart(), 100);
+  applyVisitedMarkers();
 }
 
 function dragStarted(event, d) {
@@ -289,6 +339,29 @@ function highlightGraphNode(stationId) {
     .classed("graph-node--active", (d) => d.id === stationId);
 }
 
+/* Atenúa en el grafo los nodos que no coinciden con la búsqueda libre,
+   con el mismo criterio de coincidencia usado para el contador de
+   resultados y para la cuadrícula (título, pregunta o eventos). */
+function applySearchToGraph(term) {
+  if (!g) return;
+  if (!term || term.length < 2) {
+    g.selectAll(".graph-node").classed("dimmed", false);
+    return;
+  }
+  const lower = term.toLowerCase();
+  g.selectAll(".graph-node").classed("dimmed", (d) => {
+    const station = getStation(d.id);
+    const events = EVENTS.filter((e) => e.s === d.id);
+    const eventMatch = events.some(
+      (e) =>
+        e.e.toLowerCase().includes(lower) ||
+        e.r.toLowerCase().includes(lower) ||
+        e.f.toLowerCase().includes(lower),
+    );
+    return !(stationMatchesSearch(station, lower) || eventMatch);
+  });
+}
+
 /* ================================================
    VISTA DE DETALLE
    ================================================ */
@@ -296,12 +369,54 @@ function highlightGraphNode(stationId) {
 let tabListenersSetup = false;
 let refTooltipDocListenerSetup = false;
 
+/* Pestaña "Resumen" — armazón estructural para contenido pendiente de
+   redacción editorial (D23/D26/D27/D28 del encargo a Agente 2, ver
+   ENCARGO_AGENTE_2_CONTENIDO.md). Lee campos opcionales en STATIONS que
+   hoy no existen todavía: resumenLinea, audiencia, preguntasReflexion
+   (array), fraseCitable. Mientras no se añadan, se muestra un estado
+   vacío explícito en vez de fabricar contenido — cada bloque se pinta
+   de forma independiente, así que Agente 2 puede ir rellenando estación
+   a estación sin que el resto quede a medias. */
+function renderResumenTab(station) {
+  const hasAny =
+    station.resumenLinea ||
+    station.audiencia ||
+    (station.preguntasReflexion && station.preguntasReflexion.length) ||
+    station.fraseCitable;
+
+  if (!hasAny) {
+    return `<div class="resumen-empty">
+      <p>${ICONS.compass || ""} Esta sección está pendiente de contenido editorial (resumen de una línea, nota de audiencia, preguntas de reflexión y frase citable).</p>
+    </div>`;
+  }
+
+  let html = '<div class="resumen-block">';
+  if (station.resumenLinea) {
+    html += `<p class="resumen-linea">${station.resumenLinea}</p>`;
+  }
+  if (station.audiencia) {
+    html += `<div class="resumen-audiencia"><h4>¿Para quién es esta estación?</h4><p>${station.audiencia}</p></div>`;
+  }
+  if (station.preguntasReflexion && station.preguntasReflexion.length) {
+    html += `<div class="resumen-preguntas"><h4>Preguntas para reflexionar</h4><ul>${station.preguntasReflexion
+      .map((q) => `<li>${q}</li>`)
+      .join("")}</ul></div>`;
+  }
+  if (station.fraseCitable) {
+    html += `<blockquote class="resumen-citable">${station.fraseCitable}</blockquote>`;
+  }
+  html += "</div>";
+  return html;
+}
+
 function showStationDetail(stationId) {
   const station = getStation(stationId);
   if (!station) return;
 
   const pageView = document.getElementById("pageView");
   if (!pageView) return;
+
+  markStationVisited(stationId);
 
   pageView.classList.add("active");
   document
@@ -327,8 +442,30 @@ function showStationDetail(stationId) {
   document.getElementById("pageQuestion").innerHTML =
     `<strong>Pregunta:</strong> ${station.question}`;
   document.getElementById("pagePos").textContent =
-    `${station.id + 1} de ${STATIONS.length}`;
+    `Estación ${station.id + 1} de ${STATIONS.length}`;
+  document.getElementById("pagePos").dataset.stationId = station.id;
+  document.getElementById("resumenContent").innerHTML = renderResumenTab(station);
   document.getElementById("synthesisContent").innerHTML = station.synthesis;
+  linkGlossaryTerms(document.getElementById("synthesisContent"));
+
+  // C22: el párrafo de transición al final de cada estación (ya presente
+  // en el contenido, data.js) pasa a ser un enlace real a la siguiente,
+  // sin tocar el texto — solo se añade el comportamiento.
+  const transitionEl = document.querySelector("#synthesisContent .station-transition");
+  if (transitionEl && station.id < STATIONS.length - 1) {
+    transitionEl.classList.add("is-clickable");
+    transitionEl.setAttribute("role", "button");
+    transitionEl.setAttribute("tabindex", "0");
+    transitionEl.setAttribute("aria-label", `Ir a la estación ${station.id + 2}`);
+    const goNext = () => showStationDetail(station.id + 1);
+    transitionEl.addEventListener("click", goNext);
+    transitionEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        goNext();
+      }
+    });
+  }
 
   const quad = QUAD[station.id.toString()];
   if (quad) {
@@ -404,6 +541,11 @@ ${idx < 3 ? '<div class="theo-arrow">→</div>' : ''}
     showStationDetail(station.id + 1);
   document.getElementById("pageBackBtn").onclick = backToAtlas;
 
+  // Deep-link: permite compartir/recargar un enlace directo a esta
+  // estación. history.replaceState en vez de asignar location.hash para
+  // no generar una entrada de historial por cada estación visitada.
+  history.replaceState(null, "", `#estacion-${station.id + 1}`);
+
   document
     .querySelectorAll(".detail-tab")
     .forEach((tab) => {
@@ -449,10 +591,19 @@ ${idx < 3 ? '<div class="theo-arrow">→</div>' : ''}
   augmentRefChips(document.getElementById("theologyContent"));
   augmentRefChips(document.getElementById("evidencesContent"));
   applyReveals(document.getElementById("pageView"));
+
+  // El título recibe el foco (tabindex="-1" en el HTML: no entra en el
+  // orden de tabulación normal, solo es destino explícito de navegación)
+  // para que quien navega por teclado no quede anclado a un nodo del
+  // grafo que un instante después queda oculto.
+  document.getElementById("pageTitle")?.focus({ preventScroll: true });
 }
 
 function backToAtlas() {
   document.getElementById("pageView").classList.remove("active");
+  document.body.classList.remove("reading-mode");
+  document.getElementById("readingModeToggle")?.setAttribute("aria-pressed", "false");
+  history.replaceState(null, "", location.pathname + location.search);
   document
     .querySelectorAll(".intro, .map-arg, .toolbar, .chip-row, .content-area")
     .forEach((el) => el?.classList.remove("hidden-by-page"));
@@ -477,6 +628,11 @@ function backToAtlas() {
     }
   };
   setTimeout(scrollBack, 380);
+
+  // Devuelve el foco al control de vista activo (grafo/cuadrícula) en vez
+  // de dejarlo en el botón "Atlas" que un instante después puede quedar
+  // fuera de la vista visible.
+  document.querySelector(".toggle-btn.active")?.focus({ preventScroll: true });
 }
 
 let _refTooltipEl = null;
@@ -602,17 +758,81 @@ function renderEpiLegend() {
     .join("");
 }
 
+function glossarySlug(term) {
+  return term
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function renderGlossary() {
   const panel = document.getElementById("glossaryPanel");
   if (!panel || typeof GLOSSARY === "undefined") return;
   panel.innerHTML = GLOSSARY.map(
     (g) =>
-      `<div class="glossary-item">` +
+      `<div class="glossary-item" id="gloss-${glossarySlug(g.term)}">` +
       `<span class="glossary-term">${g.term}</span>` +
       `<span class="glossary-sub">${g.sub}</span>` +
       `<p class="glossary-def">${g.def}</p>` +
       `</div>`,
   ).join("");
+}
+
+/* D24: enlaza in-line, dentro de la prosa de la estación, la primera
+   aparición de cada término que ya existe en GLOSSARY — sin añadir
+   términos nuevos, solo comportamiento sobre el texto existente.
+   Recorre nodos de texto (no regex sobre el HTML) para no romper
+   etiquetas ni volver a envolver contenido ya envuelto (epi-tag, kw…). */
+function linkGlossaryTerms(container) {
+  if (!container || typeof GLOSSARY === "undefined") return;
+  const linkedAlready = new Set();
+  GLOSSARY.forEach((g) => {
+    if (linkedAlready.has(g.term)) return;
+    const re = new RegExp(`\\b(${escapeRegex(g.term)})\\b`, "i");
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!re.test(node.nodeValue)) return NodeFilter.FILTER_SKIP;
+        const p = node.parentElement;
+        if (p && (p.closest(".gloss-link") || p.closest(".epi-tag") || p.closest("h3, h4, h5")))
+          return NodeFilter.FILTER_SKIP;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    const node = walker.nextNode();
+    if (!node) return;
+    const match = node.nodeValue.match(re);
+    if (!match) return;
+    const before = node.nodeValue.slice(0, match.index);
+    const after = node.nodeValue.slice(match.index + match[0].length);
+    const span = document.createElement("span");
+    span.className = "gloss-link";
+    span.setAttribute("role", "button");
+    span.setAttribute("tabindex", "0");
+    span.dataset.term = g.term;
+    span.textContent = match[0];
+    const parent = node.parentNode;
+    parent.insertBefore(document.createTextNode(before), node);
+    parent.insertBefore(span, node);
+    parent.insertBefore(document.createTextNode(after), node);
+    parent.removeChild(node);
+    linkedAlready.add(g.term);
+  });
+}
+
+function openGlossaryTerm(term) {
+  const btn = document.getElementById("glossaryToggle");
+  const panel = document.getElementById("glossaryPanel");
+  if (!btn || !panel) return;
+  panel.classList.add("open");
+  btn.setAttribute("aria-expanded", "true");
+  const item = document.getElementById(`gloss-${glossarySlug(term)}`);
+  if (item) {
+    item.scrollIntoView({ block: "nearest" });
+    item.classList.add("gloss-flash");
+    setTimeout(() => item.classList.remove("gloss-flash"), 1200);
+  }
 }
 
 /* Mecanismo compartido: botón que abre/cierra un panel desplegable,
@@ -649,6 +869,102 @@ function setupPanelToggle(btnId, panelId) {
   });
 }
 
+/* Alto contraste, modo oscuro y modo lectura — mismo patrón que el
+   selector de tamaño de fuente: clase + persistencia en localStorage
+   (excepto modo lectura, que es un estado de sesión, no una preferencia
+   permanente). */
+function setupDisplayToggles() {
+  const hcBtn = document.getElementById("highContrastToggle");
+  if (hcBtn) {
+    const applyHc = (on) => {
+      document.documentElement.classList.toggle("hc-mode", on);
+      hcBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    };
+    let hcOn = false;
+    try {
+      hcOn = localStorage.getItem("highContrast") === "1";
+    } catch (_) {}
+    applyHc(hcOn);
+    hcBtn.addEventListener("click", () => {
+      hcOn = !hcOn;
+      applyHc(hcOn);
+      try {
+        localStorage.setItem("highContrast", hcOn ? "1" : "0");
+      } catch (_) {}
+    });
+  }
+
+  const darkBtn = document.getElementById("darkModeToggle");
+  if (darkBtn) {
+    const applyDark = (on) => {
+      document.documentElement.setAttribute("data-theme", on ? "dark" : "light");
+      darkBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    };
+    let darkOn = false;
+    try {
+      darkOn = localStorage.getItem("theme") === "dark";
+    } catch (_) {}
+    applyDark(darkOn);
+    darkBtn.addEventListener("click", () => {
+      darkOn = !darkOn;
+      applyDark(darkOn);
+      try {
+        localStorage.setItem("theme", darkOn ? "dark" : "light");
+      } catch (_) {}
+    });
+  }
+
+  const readingBtn = document.getElementById("readingModeToggle");
+  if (readingBtn) {
+    readingBtn.addEventListener("click", () => {
+      const on = document.body.classList.toggle("reading-mode");
+      readingBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+}
+
+/* G3: swipe horizontal para pasar de estación dentro del detalle, como
+   complemento táctil a los botones ← Anterior / Siguiente → (no los
+   sustituye). Ignora el gesto si empieza dentro de una franja que ya
+   tiene su propio scroll horizontal (las tabs) o si el movimiento es
+   más vertical que horizontal (para no robarle el scroll de la página
+   a quien solo está leyendo). */
+function setupStationSwipe() {
+  const pageView = document.getElementById("pageView");
+  if (!pageView) return;
+  let startX = 0, startY = 0, tracking = false;
+
+  pageView.addEventListener(
+    "touchstart",
+    (e) => {
+      if (e.target.closest(".detail-tabs, .gloss-link, .ref-hoverable, a, button")) {
+        tracking = false;
+        return;
+      }
+      tracking = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    },
+    { passive: true },
+  );
+
+  pageView.addEventListener(
+    "touchend",
+    (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      const currentId = parseInt(document.getElementById("pagePos").dataset.stationId, 10);
+      if (Number.isNaN(currentId)) return;
+      if (dx < 0 && currentId < STATIONS.length - 1) showStationDetail(currentId + 1);
+      else if (dx > 0 && currentId > 0) showStationDetail(currentId - 1);
+    },
+    { passive: true },
+  );
+}
+
 /* ── Scroll cinematic + nav shadow + progress bar ── */
 function initCinematicScroll() {
   if (!document.getElementById("scrollProgress")) {
@@ -657,6 +973,13 @@ function initCinematicScroll() {
     bar.className = "scroll-progress";
     document.body.appendChild(bar);
   }
+  const updateHeaderHeightVar = () => {
+    const header = document.querySelector(".app-header");
+    document.documentElement.style.setProperty("--header-h", `${header?.offsetHeight || 64}px`);
+  };
+  updateHeaderHeightVar();
+  window.addEventListener("resize", updateHeaderHeightVar, { passive: true });
+
   let ticking = false;
   const onScroll = () => {
     if (ticking) return;
@@ -671,6 +994,18 @@ function initCinematicScroll() {
         const header = document.querySelector(".app-header");
         const threshold = (header?.offsetHeight || 60) + 4;
         pageNav.classList.toggle("is-scrolled", window.scrollY > threshold);
+      }
+      // G1: toolbar compacta al bajar (solo tiene efecto visual en el
+      // breakpoint móvil, donde .toolbar es sticky — ver style.css).
+      document.querySelector(".toolbar")?.classList.toggle("is-compact", window.scrollY > 40);
+
+      // G2: botón flotante "volver arriba" — solo dentro del detalle de
+      // una estación y solo cuando ya se ha bajado lo suficiente para
+      // que merezca la pena (evita el ruido de mostrarlo siempre).
+      const backToTop = document.getElementById("backToTopBtn");
+      if (backToTop) {
+        const inStation = document.getElementById("pageView")?.classList.contains("active");
+        backToTop.hidden = !(inStation && window.scrollY > 600);
       }
       ticking = false;
     });
@@ -788,16 +1123,13 @@ function applyFilterAndSearchToGrid() {
     let matchesSearch = true;
 
     if (term.length >= 2) {
-      const stationMatch =
-        station.title.toLowerCase().includes(term) ||
-        station.question.toLowerCase().includes(term);
       const eventMatch = events.some(
         (e) =>
           e.e.toLowerCase().includes(term) ||
           e.r.toLowerCase().includes(term) ||
           e.f.toLowerCase().includes(term),
       );
-      matchesSearch = stationMatch || eventMatch;
+      matchesSearch = stationMatchesSearch(station, term) || eventMatch;
 
       const scTitle = card.querySelector(".sc-title");
       const scQuestion = card.querySelector(".sc-question");
@@ -916,10 +1248,8 @@ function handleSearch(term) {
         e.r.toLowerCase().includes(term.toLowerCase()) ||
         e.f.toLowerCase().includes(term.toLowerCase()),
     );
-    const stationResults = filteredStations.filter(
-      (s) =>
-        s.title.toLowerCase().includes(term.toLowerCase()) ||
-        s.question.toLowerCase().includes(term.toLowerCase()),
+    const stationResults = filteredStations.filter((s) =>
+      stationMatchesSearch(s, term.toLowerCase()),
     );
     const total = results.length + stationResults.length;
     if (resultHint) {
@@ -937,6 +1267,7 @@ function handleSearch(term) {
   }
 
   applyFilterAndSearchToGrid();
+  applySearchToGraph(term);
 }
 
 function setupViewToggle() {
@@ -985,6 +1316,7 @@ function initApp() {
 
   renderChips();
   renderStationsGrid();
+  applyVisitedMarkers();
   setupViewToggle();
   renderEpiLegend();
   setupPanelToggle("epiLegendToggle", "epiLegendPanel");
@@ -1012,7 +1344,14 @@ function initApp() {
       applyFilterAndSearchToGrid();
     });
 
-  if (typeof d3 !== "undefined") {
+  // G4: en móvil, el grafo (arrastrar + zoom con el dedo) es más difícil
+  // de manejar que en escritorio; la cuadrícula ya es la alternativa
+  // natural, así que arranca ahí. El grafo se inicializa bajo demanda
+  // (setupViewToggle) en cuanto alguien lo pide explícitamente.
+  const startsOnMobile = window.matchMedia("(max-width: 640px)").matches;
+  if (startsOnMobile) {
+    document.getElementById("toggleGrid")?.click();
+  } else if (typeof d3 !== "undefined") {
     setTimeout(initGraph, 100);
     console.log("✓ D3.js listo — grafo inicializando...");
   } else {
@@ -1057,9 +1396,54 @@ function initApp() {
       ?.classList.add("active");
   }
 
+  setupDisplayToggles();
+
+  document.getElementById("readInOrderBtn")?.addEventListener("click", () => showStationDetail(0));
+
+  setupStationSwipe();
+
+  document.getElementById("backToTopBtn")?.addEventListener("click", () => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+  });
+
+  const graphHint = document.getElementById("graphOnboardHint");
+  if (graphHint) {
+    let dismissed = false;
+    try {
+      dismissed = localStorage.getItem("graphHintDismissed") === "1";
+    } catch (_) {}
+    if (dismissed) graphHint.hidden = true;
+    document.getElementById("graphOnboardHintClose")?.addEventListener("click", () => {
+      graphHint.hidden = true;
+      try {
+        localStorage.setItem("graphHintDismissed", "1");
+      } catch (_) {}
+    });
+  }
+
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest(".gloss-link");
+    if (link) openGlossaryTerm(link.dataset.term);
+  });
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.closest(".gloss-link")) {
+      e.preventDefault();
+      openGlossaryTerm(e.target.closest(".gloss-link").dataset.term);
+    }
+  });
+
   initCinematicScroll();
   initRevealObserver();
   applyReveals();
+
+  // Abre directamente la estación indicada en la URL, si la hay
+  // (enlace compartido o recarga de página con #estacion-N).
+  const hashMatch = location.hash.match(/^#estacion-(\d+)$/);
+  if (hashMatch) {
+    const stationId = parseInt(hashMatch[1], 10) - 1;
+    if (getStation(stationId)) showStationDetail(stationId);
+  }
 
   console.log("✓ Atlas Teológico v4.0 ¡LISTO!");
   console.log(`  • ${STATIONS.length} estaciones cargadas`);

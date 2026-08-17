@@ -899,6 +899,28 @@ body {
   font-size: .96em; line-height: 1.65; color: var(--tinta-dim); margin: 0;
 }
 .map-arg-lede strong { color: var(--sello); font-weight: 700; }
+.read-in-order-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: .78em;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 11px 20px;
+  min-height: 44px;
+  border-radius: 100px;
+  border: 1.5px solid var(--gold);
+  background: transparent;
+  color: var(--gold-deep);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.read-in-order-btn:hover,
+.read-in-order-btn:focus-visible {
+  background: var(--gold);
+  color: var(--tinta-intensa, #1B0D03);
+}
 
 @media (max-width: 860px) {
   .map-arg { padding: 18px 18px 16px; }
@@ -1185,6 +1207,9 @@ body {
   color: var(--tinta-soft);
   font-size: 1.03em;
   margin: 0 0 12px 0;
+  /* ~75 caracteres por línea: por debajo de eso la prosa larga fatiga
+     la lectura en pantallas anchas. */
+  max-width: 75ch;
 }
 .syn-block blockquote {
   position: relative;
@@ -1905,6 +1930,10 @@ mark {
   repeating-linear-gradient(90deg, rgba(35,32,25,.006) 0px, rgba(35,32,25,.006) 1px, transparent 1px, transparent 24px),
   var(--papel-2);
   cursor: grab; user-select: none; -webkit-user-select: none;
+  /* El drag/zoom del grafo (D3) gestiona el gesto táctil por su cuenta;
+     sin esto, el navegador compite con D3 e intenta hacer scroll/zoom
+     de página a la vez que se arrastra un nodo. */
+  touch-action: none;
 
   background:
     radial-gradient(circle at 50% 50%, var(--papel-lift), var(--papel));
@@ -2055,6 +2084,99 @@ mark {
   border-color: var(--gold-deep);
   color: var(--gold-deep);
 }
+
+/* ─── B12/E34/B15: toggles de visualización (contraste, oscuro, lectura) ─── */
+.display-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: .72em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 8px 14px;
+  border-radius: 100px;
+  border: 1.5px solid var(--vitela-line);
+  background: #fff;
+  color: var(--tinta-dim);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.display-toggle-btn:hover,
+.display-toggle-btn[aria-pressed="true"] {
+  border-color: var(--gold-deep);
+  color: var(--gold-deep);
+}
+.display-toggle-btn[aria-pressed="true"] {
+  background: rgba(212, 167, 83, 0.14);
+}
+#readingModeToggle {
+  margin-left: auto;
+}
+@media (max-width: 640px) {
+  .display-toggle-btn span { display: none; }
+  .display-toggle-btn { padding: 8px; }
+}
+
+/* Alto contraste: sube el contraste texto/fondo por encima del ya
+   correcto por defecto (12.81:1 medido), para quien necesita más
+   separación aún — grosor de borde y texto más oscuro/plano. */
+html.hc-mode {
+  --tinta-soft: #000;
+  --tinta-dim: #1a1a1a;
+}
+html.hc-mode .syn-block p,
+html.hc-mode .syn-block li {
+  color: #000;
+}
+html.hc-mode .vitela-line,
+html.hc-mode .app-shell,
+html.hc-mode .content-area,
+html.hc-mode .station-card,
+html.hc-mode .theo-cell {
+  border-color: #000 !important;
+}
+html.hc-mode a,
+html.hc-mode .ref-chip {
+  text-decoration: underline;
+}
+
+/* Modo oscuro real: paleta invertida completa, no solo el fondo exterior
+   de mesa. Usa las mismas variables tonales que ya existen (mesa/pliego/
+   pozo) para no introducir un segundo sistema de color. */
+html[data-theme="dark"] {
+  --papel: #1b1712;
+  --papel-2: #22190f;
+  --papel-lift: #241a10;
+  --vitela: #2a2016;
+  --vitela-line: #4a3d2c;
+  --tinta: #ece4d3;
+  --tinta-soft: #d8cdb6;
+  --tinta-dim: #b3a58a;
+}
+html[data-theme="dark"] .app-shell,
+html[data-theme="dark"] .content-area,
+html[data-theme="dark"] .station-card,
+html[data-theme="dark"] .graph-view,
+html[data-theme="dark"] .graph-viewport {
+  background: var(--papel);
+  color: var(--tinta);
+}
+html[data-theme="dark"] .display-toggle-btn,
+html[data-theme="dark"] .glossary-btn,
+html[data-theme="dark"] .epi-legend-btn {
+  background: var(--papel-2);
+  color: var(--tinta-dim);
+}
+
+/* Modo lectura: dentro del detalle de estación (el resto de la app ya
+   queda oculta ahí por .hidden-by-page). Reduce el "chrome" propio de la
+   vista de detalle — eyebrow y navegación prev/anterior — dejando visible
+   el botón de volver, para que nunca se pierda la salida. */
+body.reading-mode .page-eyebrow,
+body.reading-mode .nav-btns {
+  display: none;
+}
 .epi-legend {
   position: absolute;
   top: calc(100% + 10px);
@@ -2181,6 +2303,19 @@ mark {
     padding: 10px 14px;
   }
 
+  /* G1: la toolbar queda pegada bajo la cabecera al hacer scroll, en vez
+     de desaparecer del todo — el buscador y el toggle de vista siguen a
+     mano sin tener que volver arriba. --header-h la fija app.js con la
+     altura real medida (initCinematicScroll). */
+  .toolbar {
+    position: sticky;
+    top: var(--header-h, 64px);
+    z-index: 40;
+  }
+  .toolbar.is-compact {
+    padding: 8px 14px;
+  }
+
   .graph-view { padding: 12px; border-radius: 16px; }
   .graph-viewport { height: 340px; border-radius: 12px; }
   .graph-legend { font-size: .6em; bottom: 6px; right: 6px; }
@@ -2257,9 +2392,16 @@ mark {
   .brand-title { font-size: .95em; }
   .version-badge { display: none; }
   .sc-title { font-size: 1.08em; }
-  .epi-legend-btn { padding: 8px; }
+  .epi-legend-btn,
+  .glossary-btn {
+    padding: 8px;
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
+  }
   .epi-legend-btn-label { display: none; }
   .epi-legend { width: calc(100vw - 32px); }
+  .display-toggle-btn { min-height: 44px; min-width: 44px; justify-content: center; }
 }
 
 /* ---------- SAFE AREA MÓVIL (Android/iOS) ---------- */
@@ -2634,6 +2776,172 @@ button, .chip, .sc-goto, .detail-tab, .toggle-btn,
   font-weight: 800;
   color: var(--gold-deep);
 }
+.station-transition.is-clickable {
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.2s var(--ease-out);
+}
+.station-transition.is-clickable:hover,
+.station-transition.is-clickable:focus-visible {
+  background: rgba(212, 167, 83, 0.08);
+}
+
+/* D24: término enlazado in-line al glosario */
+.gloss-link {
+  cursor: pointer;
+  border-bottom: 1.5px dotted var(--glosa, #3B5B52);
+  color: inherit;
+}
+.gloss-link:hover,
+.gloss-link:focus-visible {
+  border-bottom-style: solid;
+  color: var(--glosa, #3B5B52);
+}
+/* Pestaña Resumen — armazón estructural, contenido pendiente (Agente 2) */
+.resumen-empty {
+  padding: 24px;
+  border: 1.5px dashed var(--vitela-line);
+  border-radius: var(--radius-md);
+  color: var(--tinta-dim);
+  font-style: italic;
+  text-align: center;
+}
+.resumen-linea {
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--tinta);
+  margin: 0 0 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--vitela-line);
+}
+.resumen-audiencia,
+.resumen-preguntas {
+  margin-bottom: 22px;
+}
+.resumen-audiencia h4,
+.resumen-preguntas h4 {
+  font-family: var(--font-mono);
+  font-size: .8em;
+  letter-spacing: .04em;
+  color: var(--gold-deep);
+  margin: 0 0 8px;
+}
+.resumen-preguntas ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.resumen-preguntas li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+  color: var(--tinta-soft);
+}
+.resumen-citable {
+  margin: 20px 0 0;
+  padding: 16px 20px;
+  border-left: 4px solid var(--gold);
+  background: rgba(212, 167, 83, 0.08);
+  font-style: italic;
+  font-size: 1.08em;
+  color: var(--tinta);
+}
+
+/* A7: el bloque de síntesis final (data.js, estación 13) ya conecta las
+   13 estaciones en el contenido — esto solo le da prominencia visual
+   propia, para que se lea como el cierre del Atlas y no como el final
+   de "una estación más". Ningún texto nuevo, solo presentación. */
+.atlas-closing {
+  margin-top: 36px;
+  padding: 32px 28px 28px;
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--gold);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(212,167,83,.10), transparent 60%),
+    var(--papel-lift, #fff);
+  box-shadow: 0 4px 24px rgba(27,13,3,.10);
+  position: relative;
+}
+.atlas-closing::before {
+  content: "◈ CIERRE DEL ATLAS";
+  position: absolute;
+  top: -13px; left: 28px;
+  font-family: var(--font-mono);
+  font-size: .68em;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--gold-deep);
+  background: var(--papel, #F2EEE4);
+  padding: 2px 10px;
+}
+.atlas-closing h3 {
+  font-size: 1.55em;
+  margin-top: 4px !important;
+}
+
+/* G2: volver arriba — flotante, solo visible en móvil (en escritorio el
+   detalle de estación no suele requerir tanto scroll y ya hay pageNav
+   sticky con el botón "Volver al atlas"). */
+.back-to-top-btn {
+  display: none;
+}
+@media (max-width: 640px) {
+  .back-to-top-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: 16px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    background: var(--tinta);
+    color: var(--papel);
+    box-shadow: 0 6px 18px rgba(27,13,3,.28);
+    z-index: 45;
+    cursor: pointer;
+  }
+  .back-to-top-btn[hidden] { display: none; }
+}
+
+/* E33: pista de que el grafo es interactivo, descartable */
+.graph-onboard-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px dashed var(--vitela-line);
+  background: rgba(212, 167, 83, 0.08);
+  color: var(--tinta-dim);
+  font-size: .82em;
+  line-height: 1.4;
+}
+.graph-onboard-hint[hidden] { display: none; }
+.graph-onboard-hint button {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--tinta-dim);
+  cursor: pointer;
+  font-weight: 700;
+  padding: 4px 8px;
+}
+.graph-onboard-hint button:hover,
+.graph-onboard-hint button:focus-visible {
+  color: var(--sello);
+}
+
+.glossary-item.gloss-flash {
+  animation: gloss-flash-anim 1.2s ease-out;
+}
+@keyframes gloss-flash-anim {
+  0% { background: rgba(212, 167, 83, 0.35); }
+  100% { background: transparent; }
+}
 .station-transition strong {
   color: var(--tinta);
   font-style: normal;
@@ -2918,6 +3226,29 @@ button:active,
 }
 
 /* ── Station-card hover lift premium ── */
+/* C18/E31: marca de progreso de lectura — no compite con el color de
+   estación (border-left) porque va en la esquina opuesta. */
+.station-card.is-visited::after {
+  content: "✓ visitada";
+  position: absolute;
+  top: 14px; right: 14px;
+  font-family: var(--font-mono);
+  font-size: .62em;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--glosa);
+  background: rgba(59, 91, 82, 0.1);
+  border: 1px solid var(--glosa-soft);
+  border-radius: 100px;
+  padding: 3px 9px;
+  z-index: 2;
+}
+.graph-node.is-visited .graph-node-ring {
+  stroke: var(--glosa, #3B5B52);
+  stroke-width: 2.5px;
+  stroke-dasharray: none;
+}
+
 .station-card {
   position: relative;
   display: flex; flex-direction: column; gap: 10px;

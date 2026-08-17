@@ -35,7 +35,7 @@
     />
 
     <!-- D3.js v7 — fuerza + SVG (CDN) -->
-    <script src="https://d3js.org/d3.v7.min.js" defer></script>
+    <script src="vendor/d3.v7.min.js" defer></script>
 
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -56,6 +56,24 @@
           </div>
 
           <div class="header-tools">
+            <button
+              class="display-toggle-btn"
+              id="highContrastToggle"
+              type="button"
+              aria-pressed="false"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+              <span>Alto contraste</span>
+            </button>
+            <button
+              class="display-toggle-btn"
+              id="darkModeToggle"
+              type="button"
+              aria-pressed="false"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.5A8.5 8.5 0 1 1 11.5 3a7 7 0 0 0 9.5 9.5z"/></svg>
+              <span>Modo oscuro</span>
+            </button>
             <div class="epi-legend-wrap">
               <button
                 class="glossary-btn"
@@ -122,6 +140,9 @@
           <p class="map-arg-lede">
             Jesús no predicó sobre sí mismo en abstracto: predicó el <strong>Reino de Dios</strong>, y ese anuncio traza un único arco — desde quién es el Rey hasta cómo culmina su reinado — que las trece estaciones siguen en orden. Cada una responde una pregunta y ofrece tres niveles de lectura: histórico-literario, interpretación del Nuevo Testamento y lectura cristiana-canónica.
           </p>
+          <button class="read-in-order-btn" id="readInOrderBtn" type="button">
+            Leer en orden, desde la Estación 1 →
+          </button>
         </div>
       </section>
 
@@ -218,6 +239,10 @@
           role="tabpanel"
           aria-label="Mapa de estaciones"
         >
+          <div class="graph-onboard-hint" id="graphOnboardHint">
+            <span>Arrastra un nodo o haz zoom para explorar el mapa. Clic (o Enter) en un nodo abre esa estación.</span>
+            <button type="button" id="graphOnboardHintClose" aria-label="Cerrar aviso">✕</button>
+          </div>
           <div class="graph-viewport" id="graphViewport">
             <div class="graph-surface" id="graphSurface"></div>
           </div>
@@ -266,6 +291,16 @@
         ></section>
       </main>
 
+      <button
+        class="back-to-top-btn"
+        id="backToTopBtn"
+        type="button"
+        hidden
+        aria-label="Volver arriba"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+      </button>
+
       <!-- ════════════ VISTA DE DETALLE v4.0 ════════════ -->
       <section class="page-view" id="pageView" aria-label="Detalle de estación">
         <!-- Barra de navegación superior -->
@@ -282,12 +317,22 @@
             <button id="pagePrevBtn" type="button">← Anterior</button>
             <button id="pageNextBtn" type="button">Siguiente →</button>
           </div>
+          <button
+            class="display-toggle-btn"
+            id="readingModeToggle"
+            type="button"
+            aria-pressed="false"
+            title="Oculta la barra de herramientas para leer sin distracciones"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Modo lectura</span>
+          </button>
         </nav>
 
         <!-- Encabezado premium -->
         <div class="page-header" id="pageHeader">
           <div class="page-eyebrow">◈ ESTACIÓN TEOLÓGICA</div>
-          <h2 class="page-title" id="pageTitle"></h2>
+          <h2 class="page-title" id="pageTitle" tabindex="-1"></h2>
           <div class="page-question" id="pageQuestion"></div>
         </div>
 
@@ -297,6 +342,19 @@
           role="tablist"
           aria-label="Secciones de la estación"
         >
+          <button
+            class="detail-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tabResumen"
+            id="tabBtnResumen"
+            data-tab="resumen"
+            type="button"
+          >
+            <span class="tab-marker"></span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12h6"/><path d="M9 16h6"/><path d="M4 4h16v16H4z"/></svg>
+            Resumen
+          </button>
           <button
             class="detail-tab active"
             role="tab"
@@ -340,6 +398,16 @@
 
         <!-- Paneles -->
         <div class="detail-panels" id="detailPanels">
+          <article
+            class="detail-panel"
+            id="tabResumen"
+            role="tabpanel"
+            aria-labelledby="tabBtnResumen"
+            data-tab="resumen"
+          >
+            <div id="resumenContent"></div>
+          </article>
+
           <article
             class="detail-panel active"
             id="tabSynthesis"
