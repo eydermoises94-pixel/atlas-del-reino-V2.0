@@ -129,6 +129,15 @@
           <p class="hero-line-2">
             ¿De qué habló Jesús? <span class="hero-line-2-break">¿Cuál era su mensaje?</span>
           </p>
+
+          <div class="hero-cta-row">
+            <button type="button" class="hero-cta-primary" id="heroStartBtn">
+              Empezar por la Estación 1
+            </button>
+            <button type="button" class="hero-cta-secondary" id="heroExploreBtn">
+              Ver las trece estaciones ↓
+            </button>
+          </div>
         </div>
       </section>
 
@@ -328,6 +337,14 @@
             <span>Modo lectura</span>
           </button>
         </nav>
+
+        <!-- Rail de 13 segmentos: posición + progreso real (getVisitedStations) + navegación -->
+        <div
+          class="station-rail"
+          id="stationRail"
+          role="tablist"
+          aria-label="Progreso por las trece estaciones"
+        ></div>
 
         <!-- Encabezado premium -->
         <div class="page-header" id="pageHeader">

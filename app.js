@@ -40,6 +40,44 @@ function applyVisitedMarkers() {
   }
 }
 
+/* Rail de 13 segmentos en la cabecera de cada estación: posición actual +
+   progreso de lectura + navegación directa, en una sola franja de 44px.
+   A diferencia de un indicador que solo marca "todo lo anterior al índice
+   actual" (posición disfrazada de progreso), este usa getVisitedStations()
+   — el mismo dato real que ya alimenta la marca "✓ visitada" de las
+   tarjetas y el grafo — así que un segmento solo se enciende si esa
+   estación se abrió de verdad, no porque esté numéricamente antes. */
+function hexToRgba(hex, alpha) {
+  const n = parseInt(hex.replace("#", ""), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+}
+function renderStationRail(currentId) {
+  const rail = document.getElementById("stationRail");
+  if (!rail) return;
+  const visited = getVisitedStations();
+  rail.innerHTML = STATIONS.map((s) => {
+    const isCurrent = s.id === currentId;
+    const isVisited = visited.has(s.id);
+    const color = s.color || "#C75B2A";
+    const bg = isCurrent ? color : isVisited ? hexToRgba(color, 0.55) : "";
+    const state = isCurrent ? "actual" : isVisited ? "visitada" : "sin visitar";
+    return `<button
+        type="button"
+        class="rail-seg${isCurrent ? " is-current" : ""}${isVisited ? " is-visited" : ""}"
+        role="tab"
+        aria-selected="${isCurrent}"
+        aria-label="Estación ${s.id + 1}: ${s.title} — ${state}"
+        title="${s.id + 1}. ${s.title}"
+        data-station-id="${s.id}"
+      ><span class="rail-seg-bar" style="${bg ? `background:${bg}` : ""}"></span></button>`;
+  }).join("");
+  rail.querySelectorAll(".rail-seg").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      showStationDetail(parseInt(btn.dataset.stationId, 10));
+    });
+  });
+}
+
 /* ================================================
    FUNCIONES DE UTILIDAD
    ================================================ */
@@ -444,6 +482,7 @@ function showStationDetail(stationId) {
   document.getElementById("pagePos").textContent =
     `Estación ${station.id + 1} de ${STATIONS.length}`;
   document.getElementById("pagePos").dataset.stationId = station.id;
+  renderStationRail(station.id);
   document.getElementById("resumenContent").innerHTML = renderResumenTab(station);
   document.getElementById("synthesisContent").innerHTML = station.synthesis;
   linkGlossaryTerms(document.getElementById("synthesisContent"));
@@ -1399,6 +1438,15 @@ function initApp() {
   setupDisplayToggles();
 
   document.getElementById("readInOrderBtn")?.addEventListener("click", () => showStationDetail(0));
+  document.getElementById("heroStartBtn")?.addEventListener("click", () => showStationDetail(0));
+  document.getElementById("heroExploreBtn")?.addEventListener("click", () => {
+    const target = document.getElementById("mapArg");
+    if (!target) return;
+    const header = document.querySelector(".app-header");
+    const headerH = header ? header.offsetHeight : 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerH - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  });
 
   setupStationSwipe();
 

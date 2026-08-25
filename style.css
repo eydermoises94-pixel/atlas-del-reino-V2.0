@@ -837,6 +837,55 @@ body {
 .intro:hover .hero-line-2 { color: var(--tinta); letter-spacing: .02em; }
 .hero-line-2-break { display: inline-block; }
 
+/* ---- CTA del héroe: conversión directa, sin exigir que el visitante
+   entienda el grafo/matriz antes de poder leer algo ---- */
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+  animation: slide-up var(--dur-slow) var(--ease-out) 260ms both;
+}
+.hero-cta-primary,
+.hero-cta-secondary {
+  font-family: var(--font-mono);
+  font-size: .78em;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 14px 26px;
+  min-height: 48px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all .25s var(--ease-out);
+}
+.hero-cta-primary {
+  border: 1.5px solid var(--tinta);
+  background: var(--tinta);
+  color: var(--papel);
+  box-shadow: 0 10px 24px -12px rgba(35,32,25,.5);
+}
+.hero-cta-primary:hover {
+  background: var(--sello);
+  border-color: var(--sello);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -14px rgba(139,46,46,.5);
+}
+.hero-cta-secondary {
+  border: 1.5px solid var(--vitela-line);
+  background: transparent;
+  color: var(--tinta-dim);
+}
+.hero-cta-secondary:hover {
+  border-color: var(--tinta);
+  color: var(--tinta);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta-row { animation: none; }
+  .hero-cta-primary:hover, .hero-cta-secondary:hover { transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .intro::before { animation: none; }
   .hero-frame-mark { animation: none; opacity: .85; }
@@ -2738,6 +2787,54 @@ button, .chip, .sc-goto, .detail-tab, .toggle-btn,
 }
 .page-nav.is-scrolled {
   box-shadow: 0 14px 34px rgba(27,13,3,0.25);
+}
+
+/* ── Rail de 13 segmentos: posición + progreso real + navegación,
+   en una franja de 44px. El color de cada segmento es el de su propia
+   estación (mismo dato que usan ya la tarjeta y el nodo del grafo). ── */
+.station-rail {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  padding: 10px 22px 4px;
+  background: var(--papel-2);
+  border-bottom: 1px solid var(--vitela-line);
+}
+.rail-seg {
+  flex: 1 1 0;
+  min-width: 14px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: flex .5s var(--ease-out);
+}
+.rail-seg.is-current { flex: 2.6 1 0; }
+.rail-seg-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 100px;
+  background: var(--vitela-line);
+  transition: height .3s var(--ease-out), background .3s var(--ease-out), box-shadow .3s var(--ease-out);
+}
+.rail-seg.is-visited .rail-seg-bar { height: 3px; }
+.rail-seg.is-current .rail-seg-bar {
+  height: 7px;
+  box-shadow: 0 0 10px -2px currentColor;
+}
+.rail-seg:hover .rail-seg-bar { height: 6px; }
+.rail-seg.is-current:hover .rail-seg-bar { height: 7px; }
+@media (max-width: 640px) {
+  .station-rail { padding: 8px 14px 4px; gap: 2px; }
+  .rail-seg { min-width: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail-seg, .rail-seg-bar { transition: none; }
 }
 
 /* ── Section dividers editorial ── */
