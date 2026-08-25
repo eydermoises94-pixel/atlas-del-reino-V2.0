@@ -74,7 +74,85 @@ Hoy la pestaña por defecto al abrir una estación sigue siendo "Síntesis" (com
 
 ---
 
-## 2. Categoría F — Difusión (pendiente, sin estructura construida todavía)
+## 2. Categoría G — Auditar el contenido del canvas v2 contra `data.js` (URGENTE, precisión teológica)
+
+### Por qué esto existe
+
+Además de `index.html`/`app.js`/`data.js` (lo que está publicado en GitHub), hay un segundo Atlas: un canvas interactivo en Claude Design (`Atlas del Reino v2.dc.html`), con las mismas 13 estaciones pero **redactadas de nuevo, no copiadas**. Nació como maqueta visual, pero ahora tenemos dos redacciones distintas de tu teología viviendo en dos sitios, y eso no puede quedar sin resolver — cuantos más días pase, más caro será reconciliarlas. La decisión de qué hacer con el canvas (¿se descarta el contenido? ¿se recupera parte a `data.js`? ¿producción se queda como está?) es tuya, pero antes de tomarla necesitas saber qué se conservó y qué se perdió. Eso es este encargo.
+
+**Dato que tranquiliza antes de entrar en detalle:** los 13 títulos y las 13 preguntas de estación son **idénticos** en las dos versiones — cero divergencia ahí. Lo que cambia es la redacción del cuerpo y el aparato que lo rodea.
+
+### El panorama en cifras
+
+| # | Producción (caracteres) | Canvas (caracteres) | Canvas / Prod | Enseñanzas indexadas en `EVENTS` |
+|---|---|---|---|---|
+| 01 — El Centro Absoluto | 2.262 | 1.457 | 64 % | 5 |
+| 02 — La Necesidad del Reino | 1.988 | 1.551 | 78 % | 5 |
+| 03 — La Llegada del Reino | 1.996 | 1.519 | 76 % | 5 |
+| 04 — La Entrada al Reino | 2.170 | 1.514 | 70 % | 6 |
+| 05 — La Naturaleza Interna | 2.633 | 1.338 | **51 %** | 7 |
+| 06 — Dinámica de Crecimiento | 2.614 | 1.901 | 73 % | 7 |
+| 07 — Señales Visibles | 3.000 | 1.605 | 54 % | 8 |
+| 08 — El Conflicto del Reino | 3.002 | 1.597 | 53 % | 7 |
+| 09 — La Cruz como Evento Central | 3.018 | 1.435 | **48 %** | 5 |
+| 10 — Resurrección y Exaltación | 2.940 | 1.638 | 56 % | 4 |
+| 11 — Después de la Resurrección | 2.900 | 1.579 | 54 % | 3 |
+| 12 — La Misión Global | 3.169 | 1.830 | 58 % | 4 |
+| 13 — La Consumación Final | 5.321 | 1.566 | **29 %** | 4 |
+| **Total** | **37.013** | **20.530** | **55 %** | **70** |
+
+El canvas conserva de media el 55 % del volumen de prosa de cada estación — no es un resumen brutal, es una condensación a más o menos la mitad. Las tres que más recortaron, y por tanto las que pido que mires primero, son **13 (29 %)**, **09 (48 %)** y **05 (51 %)**.
+
+### Lo que desapareció por completo, en las 13 estaciones
+
+No es solo volumen de texto: es andamiaje editorial entero.
+
+| Recurso | Producción | Canvas |
+|---|---|---|
+| Etiquetas de calibración epistemológica (`epiTag`) | 42 | **0** |
+| Términos de glosario enlazados en el cuerpo | 78 | **0** |
+| Pasos de desarrollo (`flow-step`) | 21 | **0** |
+| Subtítulos internos (`h4`/`h5`) | 74 | **0** |
+
+Las categorías de `epiTag` que se pierden son: `atlas`, `exegesis`, `sintesis`, `pentecostal`, `iphc`. Es decir, el canvas no distingue en ningún punto qué es lectura exegética directa, qué es síntesis del propio Atlas, y qué es la lectura confesional pentecostal/IPHC — la calibración A–F que es la prioridad nº 2 de `CLAUDE.md` no existe ahí.
+
+### Pasajes bíblicos: el dato bueno
+
+De 79 pasajes citados en producción, **64 se conservan en el canvas** (81 %). Solo 15 desaparecen y 1 se añade (`Mt 28:16-20` en la estación 12, que además ya está en producción — solo que citado en otra estación). El aparato bíblico sobrevivió casi entero a la condensación.
+
+Las pérdidas concentradas que sí conviene que revises con lupa:
+
+- **Estación 05 (Naturaleza Interna del Reino):** pierde `Gá 5:22-23` (fruto del Espíritu), `Jn 3:3` (nuevo nacimiento), `Mt 5:8` (bienaventuranza de los limpios de corazón). También pierde 10 términos de glosario, entre ellos las seis palabras que dan estructura a esa estación: Amor, Humildad, Justicia, Perdón, Santidad, Servicio.
+- **Estación 09 (La Cruz):** pierde `1 P 2:24`, `2 Co 5:21`, `Ef 1:7`, `Heb 10:19-20`, `Ro 3:25` — cinco pasajes que son, en conjunto, el respaldo bíblico directo de la doctrina de la expiación sustitutoria. Es la estación donde más me preocupa que la condensación haya tocado algo doctrinal, no solo estilístico.
+- **Estación 13 (Consumación Final):** pierde `1 Co 15:24-25`, `Ap 21:5`, `Mt 8:11-12`, `Ro 11:17-24`, `Ro 11:25-27` — los dos últimos son el pasaje del olivo/injerto de Romanos 11, relevante para cómo el Atlas trata la relación Israel-Iglesia en la consumación. Es también la estación con menor porcentaje de texto conservado (29 %) y con 8 términos de glosario perdidos, incluida la frase de cierre `"El Rey que murió reina para siempre y jamás habrá más muerte, ni llanto, ni dolor."`.
+
+El detalle completo, estación por estación (qué etiqueta de calibración se pierde, qué términos de glosario, qué pasaje exacto), está en `AUDITORIA_CANVAS_V2.md`, y te lo puedo pasar también como lista aparte si prefieres no cruzar los dos documentos.
+
+### Lo que te pido
+
+No es reescribir nada todavía. Es dictaminar, estación por estación o de forma global si el patrón es homogéneo:
+
+1. ¿La condensación a ~55 % del texto es fiel, o en algún punto cambia lo que se afirma y no solo cómo se dice?
+2. Para las estaciones 05, 09 y 13 en concreto: ¿los pasajes perdidos eran prescindibles en una versión más breve, o sostenían algo que sin ellos queda sin respaldo explícito (especialmente el caso de la expiación en la estación 09)?
+3. ¿La ausencia total de calibración epistemológica en el canvas es aceptable en un formato "condensado", o es una línea roja — es decir, ningún texto sin calibración A–F debería circular con tu nombre, sea cual sea el canal?
+
+Con tu respuesta a esas tres, la decisión de qué hacer con el canvas (congelarlo tal cual está, portar partes de vuelta a `data.js`, o descartar su contenido y quedarnos solo con su diseño visual) se toma sola.
+
+---
+
+### Respuesta recibida (2026-08-25) — VEREDICTO: contenido del canvas NO apto tal cual
+
+**1. ¿La condensación es fiel?** No de forma homogénea. Donde recorta prosa explicativa (est. 02, 03, 06 — 73-78 % conservado) es condensación legítima. Donde cae al ~50 % (05, 09, 13), el recorte cambia lo que se afirma, no cómo se dice. En la estación 09, la diferencia entre "el poder se ejerce desde la cruz" con y sin el párrafo de expiación no es de estilo: es la diferencia entre una cristología de la cruz completa y una parcial.
+
+**2. ¿Eran prescindibles los pasajes perdidos?** No. Los tres bloques (05, 09, 13) son exactamente el tipo de material que no se puede omitir "por brevedad", porque su omisión no deja un hueco visible — deja una afirmación que parece completa y no lo es. El caso de la estación 09 es el más serio: la expiación sustitutoria es doctrina IPHC nuclear, y en el canvas queda sin respaldo bíblico explícito.
+
+**3. ¿La ausencia de calibración A–F es línea roja?** Sí, y es la más importante de las tres. Un texto sin calibrar no es "menos preciso": es epistemológicamente mudo. El lector no puede distinguir Jn 12:24 citado (nivel A) de "la cruz es el verdadero trono" (síntesis del Atlas, nivel C) de la lectura premilenial de Romanos 11 (posición confesional discutida, nivel D). El daño se concentra donde más duele: el 100 % de los bloques `iphc` y `pentecostal` pierde a la vez su etiqueta y sus pasajes, con lo que la voz confesional se vuelve indistinguible de la exégesis — precisamente la falacia que el sistema A–F existe para impedir. **Ningún texto sin calibrar debería circular con el nombre de Moisés, sea cual sea el canal.**
+
+**Decisión que se deriva de este veredicto:** el contenido del canvas (`ST` en `Atlas del Reino v2.dc.html`) **queda descartado como texto publicable**, en las 13 estaciones y no solo en 05/09/13 — el veredicto de "línea roja" en calibración aplica por igual a las que sí conservaron buen volumen (02, 03, 06). El canvas se congela como **laboratorio visual únicamente**: de él se puede portar diseño (estructura de portada, rail de navegación, paleta) pero **nunca prosa**, a `data.js` o a ningún otro sitio, sin pasar primero por calibración A–F completa y verificación de pasajes. Registrado también en `AUDITORIA_CANVAS_V2.md` §8.
+
+---
+
+## 3. Categoría F — Difusión (pendiente, sin estructura construida todavía)
 
 A diferencia de la pestaña Resumen, esto **no tiene ningún andamiaje construido aún** — son piezas nuevas, algunas de página completa. Te las dejo especificadas para que definas el contenido; el HTML/CSS lo construyo yo cuando haya texto que meter dentro, no antes (así no diseño en el vacío).
 
@@ -109,6 +187,7 @@ Necesito de ti: contenido del primer envío y cadencia deseada — el resto (pla
 | Ítem | Estructura construida | Qué falta | Dónde |
 |---|---|---|---|
 | Resumen (D23/26/27/28) | Sí — pestaña, render, CSS | Solo texto, por estación | `data.js`, dentro de cada objeto de `STATIONS` |
+| **Auditoría del canvas v2 (Categoría G)** | **No aplica — es dictamen, no construcción** | **Tu veredicto en las 3 preguntas de §2** | **Condiciona qué se hace con `Atlas del Reino v2.dc.html`** |
 | F35-F40 | No | Texto + decisiones de producto | A construir tras recibir el contenido |
 
 Cuando tengas texto para cualquiera de los 4 campos de Resumen, puedes añadirlo tú directamente a `data.js` (es solo añadir propiedades a un objeto, no requiere tocar lógica) o pasármelo y lo añado yo.
