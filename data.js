@@ -304,6 +304,14 @@ const STATIONS = [
     question: "¿Quién es el Rey y qué revela sobre Dios?",
     color: "#C75B2A",
     icon: stationIcons[0],
+    resumenLinea: "El Reino de Dios no es primero un territorio ni un programa, sino una persona: donde Jesús reina, Dios está reinando.",
+    audiencia: "El punto de partida obligado del Atlas. Útil si preparas una enseñanza sobre la identidad de Jesús, o si necesitas responder a quien reduce el Reino a un proyecto social o a un destino en el más allá.",
+    preguntasReflexion: [
+      "Si el Reino es ante todo una persona y no un sistema, ¿qué cambia en la forma en que hablas de él a alguien que no cree?",
+      "¿Qué imagen de Dios traías antes de mirar el rostro de Jesús, y en qué punto concreto la corrige?",
+      "Reconocer al Rey no es solo admitirlo: es someterse. ¿Dónde te cuesta hoy ese sometimiento?",
+    ],
+    fraseCitable: "El Reino no es un lugar al que se llega. Es un Rey al que se reconoce.",
     synthesis: `<div class="syn-block" style="--card-color:#C75B2A">
 <div class="big-num">01</div>
 <h3>${ICONS.globe2} La Persona, no el territorio</h3>
@@ -339,6 +347,14 @@ const STATIONS = [
     question: "¿Qué condición humana hace necesaria su llegada?",
     color: "#8B8680",
     icon: stationIcons[1],
+    resumenLinea: "El Reino no es una mejora opcional de la vida humana, sino una intervención de emergencia sobre una esclavitud que va más allá de lo político.",
+    audiencia: "Especialmente útil para predicar sobre el pecado sin reducirlo a moralismo individual, y para responder a quien espera del evangelio solo liberación social o solo salvación interior.",
+    preguntasReflexion: [
+      "De los seis diagnósticos (pecado, demonios, enfermedad, muerte, injusticia, alienación), ¿cuál tiende a ignorar tu comunidad, y por qué precisamente ese?",
+      "¿En qué te pareces al que espera un Mesías que expulse a Roma, es decir, que resuelva tu problema visible sin tocar el profundo?",
+      "Si cada milagro es a la vez compasión y diagnóstico, ¿qué está diagnosticando Dios en lo que hoy te duele?",
+    ],
+    fraseCitable: "El enemigo nunca fue solo Roma. Por eso la liberación no podía venir de un ejército.",
     synthesis: `<div class="syn-block" style="--card-color:#8B8680">
 <div class="big-num">02</div>
 <h3>${ICONS.alert} Intervención de emergencia</h3>
@@ -371,6 +387,14 @@ const STATIONS = [
     question: "¿Cómo llega el Reino y qué significa su anuncio?",
     color: "#2E5A6B",
     icon: stationIcons[2],
+    resumenLinea: "El Reino ya ha irrumpido en la historia con Jesús, pero todavía no se ha consumado: entre esos dos extremos vivimos nosotros.",
+    audiencia: "La estación de referencia para enseñar el «ya pero todavía no». Útil cuando te preguntan por qué el mundo sigue igual si el Reino ya llegó, o cuando alguien vive la fe solo como espera del futuro.",
+    preguntasReflexion: [
+      "¿Vives más instalado en el «ya» (esperando que todo funcione ahora) o en el «todavía no» (aplazándolo todo al cielo)? ¿Qué te desequilibra hacia ese lado?",
+      "Jesús leyó Isaías 61 y dijo que se cumplía ese mismo día. ¿Qué promesa de Dios te cuesta creer que sea para hoy y no solo para el final?",
+      "El tiempo entre ambos extremos es tiempo de gracia, no de vacío. ¿Para qué crees que Dios te está dando concretamente este tiempo?",
+    ],
+    fraseCitable: "«El tiempo se ha cumplido» no es un consejo moral: es una declaración de guerra contra el antiguo orden.",
     synthesis: `<div class="syn-block" style="--card-color:#2E5A6B">
 <div class="big-num">03</div>
 <h3>${ICONS.hourglass} Kairos: El tiempo se ha cumplido</h3>
@@ -397,6 +421,14 @@ const STATIONS = [
     question: "¿Cómo entra una persona en el Reino?",
     color: "#5D7A6B",
     icon: stationIcons[3],
+    resumenLinea: "No se entra al Reino por mérito, linaje ni religión, sino por un giro completo de dirección vital que Dios mismo hace posible.",
+    audiencia: "Útil para predicar sobre conversión y arrepentimiento sin caer en el moralismo, y para enseñar por qué el arrepentimiento bíblico es un cambio de rumbo, no un sentimiento de culpa.",
+    preguntasReflexion: [
+      "Si metanoia es girar de dirección y no solo lamentar lo hecho, ¿en qué dirección ibas antes y en cuál vas ahora? ¿Se nota en algo concreto?",
+      "El joven rico se fue triste porque su seguridad estaba en otro sitio. ¿Cuál es hoy tu seguridad alternativa, la que no querrías soltar?",
+      "Recibir el Reino como un niño es aceptar que no puedes ganártelo. ¿Dónde sigues intentando pagarle a Dios lo que ya te dio gratis?",
+    ],
+    fraseCitable: "El centurión pagano entró fácil y el joven rico se fue triste. La entrada nunca dependió del currículum.",
     synthesis: `<div class="syn-block" style="--card-color:#5D7A6B">
 <div class="big-num">04</div>
 <h3>${ICONS.door} No por logros, por reorientación</h3>
@@ -433,6 +465,14 @@ const STATIONS = [
     question: "¿Qué transformación produce el Reino en la persona?",
     color: "#8B7355",
     icon: stationIcons[4],
+    resumenLinea: "La ética del Reino no es un código más exigente que cumplir con fuerza de voluntad, sino una vida que el Espíritu genera desde dentro.",
+    audiencia: "Para enseñar el Sermón del Monte sin convertirlo en una carga imposible, y para quien se pregunta por qué fracasa intentando ser mejor cristiano a base de esfuerzo.",
+    preguntasReflexion: [
+      "De los seis valores cardinales (justicia, amor al enemigo, perdón, servicio, humildad, santidad), ¿cuál es hoy el más incómodo en tu vida? ¿Qué lo hace incómodo?",
+      "Jesús lleva el mandato del acto al corazón: del puño al odio, de la mirada al deseo. ¿Qué cambia si Dios juzga ahí y no solo en lo visible?",
+      "¿Estás intentando producir fruto o estás permaneciendo en quien lo produce? ¿Cómo distingues una cosa de la otra en tu semana real?",
+    ],
+    fraseCitable: "Amar al enemigo no es un mandato que se cumple apretando los dientes. Es fruto que el Espíritu produce.",
     synthesis: `<div class="syn-block" style="--card-color:#8B7355">
 <div class="big-num">05</div>
 <h3>${ICONS.boom} Revolución de Valores</h3>
@@ -473,6 +513,14 @@ const STATIONS = [
     question: "¿Cómo crece y se expande el Reino?",
     color: "#6B8E4E",
     icon: stationIcons[5],
+    resumenLinea: "El Reino crece como la semilla y la levadura: pequeño al principio, oculto en el proceso, irreversible al final, y nunca por la fuerza.",
+    audiencia: "Muy útil para pastores de congregaciones pequeñas o en etapas de aparente estancamiento, y para enseñar las parábolas de Mateo 13 como un solo movimiento en vez de seis relatos sueltos.",
+    preguntasReflexion: [
+      "El sembrador esparce la misma semilla en todos los suelos. ¿Qué te libera —y qué te exige— saber que el resultado no depende de tu técnica?",
+      "La levadura trabaja sin hacer ruido y no se ve hasta que ya ha transformado la masa. ¿Qué obra silenciosa de Dios estás tentado a dar por muerta por falta de resultados visibles?",
+      "Si el Reino crece «sin que él sepa cómo», ¿qué parte de tu trabajo es sembrar y regar, y qué parte estás intentando hacer tú en lugar de Dios?",
+    ],
+    fraseCitable: "El Reino no avanza haciendo ruido. Avanza como la levadura: cuando se nota, ya ha transformado toda la masa.",
     synthesis: `<div class="syn-block" style="--card-color:#6B8E4E">
 <div class="big-num">06</div>
 <h3>${ICONS.seedling} Crecimiento orgánico, no político</h3>
@@ -524,6 +572,14 @@ const STATIONS = [
     question: "¿Cómo se manifiesta visiblemente el Reino?",
     color: "#4A7B8C",
     icon: stationIcons[6],
+    resumenLinea: "Los milagros no son espectáculos que validan a un predicador: son señales que muestran cómo es el mundo cuando Dios reina sin oposición.",
+    audiencia: "Clave en contexto pentecostal para enseñar lo milagroso sin sensacionalismo y sin apagarlo, y para responder a quien pregunta por qué no todos sanan si el Reino ya llegó.",
+    preguntasReflexion: [
+      "Si la señal no es el punto sino la evidencia, ¿qué buscas tú cuando pides un milagro: el poder o al Rey que lo ejerce?",
+      "Compartir mesa con los excluidos era en el mundo antiguo un acto de alianza. ¿Con quién tendría que sentarse hoy tu iglesia para que esa señal se viera?",
+      "Las señales anticipan la restauración final, no la completan todavía. ¿Cómo se sostiene la fe cuando la señal que esperabas no llega?",
+    ],
+    fraseCitable: "Cada sanidad es una muestra pequeña de cómo será el mundo entero cuando el Rey reine sin oposición.",
     synthesis: `<div class="syn-block" style="--card-color:#4A7B8C">
 <div class="big-num">07</div>
 <h3>${ICONS.target} Sēmeia: Señales, no espectáculos</h3>
@@ -557,6 +613,14 @@ const STATIONS = [
     question: "¿Por qué el Reino encuentra oposición?",
     color: "#7A5C5C",
     icon: stationIcons[7],
+    resumenLinea: "El Reino encuentra oposición en tres frentes a la vez —espiritual, religioso y político— porque ningún poder cede su territorio sin lucha.",
+    audiencia: "Útil para predicar sobre guerra espiritual sin caer ni en el sensacionalismo demonológico ni en la negación, y para acompañar a quien sufre oposición precisamente por hacer el bien.",
+    preguntasReflexion: [
+      "De los tres frentes, ¿cuál reconoce con más facilidad tu tradición y cuál prefiere no nombrar? ¿Qué se pierde al ignorarlo?",
+      "La oposición más dura a Jesús vino del sistema religioso, no del Imperio. ¿Qué te dice eso sobre los riesgos de la religión bien organizada, incluida la tuya?",
+      "Si el resultado ya está decidido en la cruz pero la batalla sigue desplegándose, ¿cómo cambia eso la forma en que enfrentas tu conflicto actual?",
+    ],
+    fraseCitable: "Jesús no negocia con los principados: los saquea. Pero primero ata al hombre fuerte.",
     synthesis: `<div class="syn-block" style="--card-color:#7A5C5C">
 <div class="big-num">08</div>
 <h3>${ICONS.swirl} Guerra espiritual real, no metáfora</h3>
@@ -590,6 +654,14 @@ const STATIONS = [
     question: "¿Cómo la muerte del Rey inaugura la nueva realidad?",
     color: "#1A1A2E",
     icon: stationIcons[8],
+    resumenLinea: "La cruz no interrumpe el mensaje del Reino: es su expresión suprema, el trono desde el cual el Rey vence y a la vez el sacrificio que nos reconcilia.",
+    audiencia: "Es la estación central del Atlas. Útil para Semana Santa, y especialmente para enseñar que la victoria sobre los poderes y la expiación de los pecados no compiten entre sí, sino que se necesitan.",
+    preguntasReflexion: [
+      "Si el poder de Dios se ejerce desde la cruz y no desde el trono, ¿qué queda en pie de tu idea de éxito, ministerial o personal?",
+      "¿Tiendes a quedarte solo con la cruz como victoria sobre el mal, o solo con la cruz como perdón de tus pecados? ¿Qué pierdes al separarlas?",
+      "El grano de trigo da fruto únicamente si muere. ¿Qué te está pidiendo Dios que sueltes y que tú sigues leyendo como derrota en vez de como siembra?",
+    ],
+    fraseCitable: "En el mundo de César el poder se ejerce desde el trono. En el Reino de Dios se ejerce desde la cruz.",
     synthesis: `<div class="syn-block" style="--card-color:#1A1A2E">
 <div class="big-num">09</div>
 <h3>${ICONS.pawn} Trono, no tragedia</h3>
@@ -633,6 +705,14 @@ const STATIONS = [
     question: "¿Qué confirma la resurrección sobre el Reino?",
     color: "#D4A855",
     icon: stationIcons[9],
+    resumenLinea: "La resurrección no es el milagro final de una biografía: es la vindicación pública del Rey crucificado y el fundamento de todo lo demás.",
+    audiencia: "Útil para predicar en Resurrección y para acompañar a quien pregunta qué razones hay para creer, con el cuidado de presentar la evidencia en su fuerza real y sin exagerarla.",
+    preguntasReflexion: [
+      "Pablo dice que sin resurrección la fe es vana. ¿Qué partes de tu vida cristiana seguirían igual mañana aunque Cristo no hubiera resucitado? ¿Qué revela eso?",
+      "Los discípulos pasaron del miedo al martirio. ¿Qué explicación alternativa te parece más seria, y por qué te convence menos que la resurrección?",
+      "Si el Crucificado es Señor, ¿qué señor menor de tu vida queda automáticamente destronado?",
+    ],
+    fraseCitable: "El Padre levantó al Hijo crucificado como sello público: este hombre que ustedes mataron es mi Señor.",
     synthesis: `<div class="syn-block" style="--card-color:#D4A855">
 <div class="big-num">10</div>
 <h3>${ICONS.sunrise} Validación divina, no milagro aislado</h3>
@@ -674,6 +754,14 @@ const STATIONS = [
     question: "¿Cómo continúa el Reino después de la resurrección?",
     color: "#A67B5B",
     icon: stationIcons[10],
+    resumenLinea: "El Reino no quedó ligado al cuerpo físico de Jesús en Galilea: desde Pentecostés se manifiesta a través de una comunidad llena del mismo Espíritu.",
+    audiencia: "Especialmente útil en contexto pentecostal para situar Pentecostés dentro de la teología del Reino y no como un episodio aparte, y para enseñar por qué la curiosidad por las fechas desvía de la misión.",
+    preguntasReflexion: [
+      "Los discípulos preguntaron por el calendario y Jesús respondió con una misión. ¿Qué preguntas tuyas sobre el futuro son en el fondo una forma de aplazar la obediencia de hoy?",
+      "El poder para la misión no viene del número, del dinero ni de la estrategia. ¿En cuál de los tres confía de hecho tu comunidad?",
+      "En Emaús Jesús enseña a leer toda la Escritura apuntando a él. ¿Cómo cambiaría tu forma de estudiar la Biblia si tomaras esa clave en serio?",
+    ],
+    fraseCitable: "Los discípulos preguntaron por el calendario. Jesús les respondió con una misión y una promesa: recibiréis poder.",
     synthesis: `<div class="syn-block" style="--card-color:#A67B5B">
 <div class="big-num">11</div>
 <h3>${ICONS.clock} Cuarenta días: Puente entre dos épocas</h3>
@@ -706,6 +794,14 @@ const STATIONS = [
     question: "¿Qué papel tienen Israel, las naciones y la comunidad?",
     color: "#3D6B8C",
     icon: stationIcons[11],
+    resumenLinea: "La misión de la Iglesia no es construir el Reino, sino dar testimonio de que el Rey ya reina, y hacerlo hasta lo último de la tierra.",
+    audiencia: "Útil para predicar sobre misión y evangelismo, para corregir la idea de que somos nosotros quienes hacemos avanzar el Reino, y para enseñar la Gran Comisión desde su único verbo imperativo.",
+    preguntasReflexion: [
+      "Si el Reino ya avanza porque el Rey ya reina, ¿qué cambia en tu manera de trabajar: qué dejas de cargar y qué sigues siendo responsable de hacer?",
+      "El único mandato de Mateo 28 es hacer discípulos, no conseguir decisiones. ¿Qué mide de hecho tu ministerio, decisiones o discípulos?",
+      "Si prójimo es cualquier ser humano que necesite misericordia, ¿a quién has dejado fuera de esa definición sin decirlo en voz alta?",
+    ],
+    fraseCitable: "La Iglesia no construye el Reino. Da testimonio de una realidad que ya es verdad porque el Rey ya reina.",
     synthesis: `<div class="syn-block" style="--card-color:#3D6B8C">
 <div class="big-num">12</div>
 <h3>${ICONS.shuffle} Ampliado, no reemplazado</h3>
@@ -747,6 +843,14 @@ const STATIONS = [
     question: "¿Cómo culmina el Reino?",
     color: "#4A3B5C",
     icon: stationIcons[12],
+    resumenLinea: "El Reino culmina cuando lo que ya es verdad se hace visible a todo ojo: venida, juicio, resurrección y renovación de todo lo creado.",
+    audiencia: "Cierra el arco del Atlas y recoge su confesión final. Útil para enseñar escatología sin especulación de calendarios, y para predicar esperanza a quien está en duelo o agotado de esperar.",
+    preguntasReflexion: [
+      "Entre el triunfalismo y el quietismo, ¿hacia cuál te inclinas tú, y qué señal concreta lo delata en tu forma de servir?",
+      "La consumación no salva almas de la creación, sino que redime la creación entera. ¿Qué implica eso para tu cuerpo, tu trabajo y tu ciudad?",
+      "Si el Atlas cierra con una convocatoria y no con una fórmula, ¿a qué te está llamando el Rey ahora mismo, terminado el recorrido?",
+    ],
+    fraseCitable: "El Rey que murió reina para siempre, y jamás habrá más muerte, ni llanto, ni dolor.",
     synthesis: `<div class="syn-block" style="--card-color:#4A3B5C">
 <div class="big-num">13</div>
 <h3>${ICONS.sunrise} Plena Manifestación: Lo que ya es, se hace visible</h3>
