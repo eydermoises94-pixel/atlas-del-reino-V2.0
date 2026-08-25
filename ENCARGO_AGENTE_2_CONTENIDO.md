@@ -8,9 +8,14 @@ Este documento recoge todo lo que quedó pendiente de la lista de 40 mejoras mul
 
 ---
 
-## 1. Pestaña "Resumen" — nueva, ya construida y vacía
+## 1. Pestaña "Resumen" — CERRADO (2026-08-25)
 
-Cada estación tiene ahora una cuarta pestaña, **"Resumen"**, antes de "Síntesis" (`index.html`, `#tabResumen`). Hoy, en las 13 estaciones, muestra un aviso de "pendiente de contenido editorial" porque **ningún campo de los siguientes existe todavía en `data.js`**. La función que los lee ya está escrita (`renderResumenTab`, `app.js`) y renderiza de forma independiente cada campo — puedes rellenar una estación sin que las otras 12 se queden a medias, y puedes rellenar solo parte de los 4 campos de una estación si quieres.
+Las 13 estaciones tienen ya sus 4 campos (`resumenLinea`, `audiencia`, `preguntasReflexion`, `fraseCitable`) en `data.js`, añadidos en el commit `b5f285a`. Verificado: sintaxis correcta, las 13 completas, y renderiza bien en producción (sin el aviso de "pendiente de contenido editorial", los 4 bloques visibles en la pestaña Resumen de cada estación). No queda nada pendiente aquí.
+
+<details>
+<summary>Especificación original (referencia, ya no aplica)</summary>
+
+Cada estación tiene una cuarta pestaña, **"Resumen"**, antes de "Síntesis" (`index.html`, `#tabResumen`). La función que los lee está escrita (`renderResumenTab`, `app.js`) y renderiza de forma independiente cada campo — se puede rellenar una estación sin que las otras 12 se queden a medias, y rellenar solo parte de los 4 campos si se quiere.
 
 ### Campos a añadir en `data.js`
 
@@ -68,9 +73,11 @@ Una frase corta, autocontenida, pensada para compartir (redes, boletín de igles
 
 No necesitas herramientas especiales: abre `index.html` en un navegador (o sirve la carpeta con `python -m http.server` y abre `http://localhost:PUERTO`), entra en cualquier estación, pulsa la pestaña "Resumen" y comprueba que se ve lo que escribiste. Si un campo no aparece, revisa que el nombre de la propiedad esté escrito exactamente igual que arriba (`resumenLinea`, no `resumenLine` ni `resumen_linea`).
 
-### Decisión abierta, no tomada por mí
+</details>
 
-Hoy la pestaña por defecto al abrir una estación sigue siendo "Síntesis" (comportamiento ya existente, no lo cambié). Una vez que "Resumen" tenga contenido en varias estaciones, puede tener sentido que pase a ser la pestaña por defecto (es lo lógico pedagógicamente: resumen antes que detalle). Esa es una decisión de producto, no técnica — decídelo tú o coméntalo con Moisés cuando el contenido esté listo, y avísame si quieres que haga ese cambio de una línea en `app.js`.
+### Decisión abierta, ahora sí aplicable — ¿pestaña por defecto?
+
+Con las 13 completas, esto pasa de hipotético a real: hoy la pestaña por defecto al abrir una estación sigue siendo "Síntesis". Pedagógicamente tendría sentido que pasara a ser "Resumen" (resumen antes que detalle). Es una decisión de producto, no técnica — dime si quieres que haga ese cambio de una línea en `app.js`.
 
 ---
 
